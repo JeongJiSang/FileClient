@@ -9,7 +9,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LoginView extends JFrame{
-	ActionHandler ac = null;
+	ActionHandler action = null;
 	
 	JLabel 			jlb_id = new JLabel("ID");
 	JLabel 			jlb_pw = new JLabel("PW");
@@ -19,8 +19,11 @@ public class LoginView extends JFrame{
 	JButton 		jbtn_join  = new JButton("회원가입");
 	Font 			font 	   = new Font("고딕체",Font.BOLD, 17);
 	
-	LoginView(ActionHandler ac) {
-		this.ac = ac;
+	LoginView() {
+		
+	}
+	LoginView(ActionHandler action) {
+		this.action = action;
 	}
 	public void initDisplay() {
 
@@ -33,15 +36,15 @@ public class LoginView extends JFrame{
 		jlb_pw.setBounds(55, 250, 80, 40);
 
 		this.add(jtf_id);
-		jtf_pw.addActionListener(ac);
+		jtf_pw.addActionListener(action);
 		this.add(jtf_pw);
 		jtf_id.setBounds(120, 200, 185, 40);
 		jtf_pw.setBounds(120, 250, 185, 40);
 
-		jbtn_login.addActionListener(ac);
+		jbtn_login.addActionListener(action);
 		this.add(jbtn_login);
 		jbtn_login.setBounds(160, 300, 100, 40);
-		jbtn_join.addActionListener(ac);
+		jbtn_join.addActionListener(action);
 		this.add(jbtn_join);
 		jbtn_join.setBounds(160, 350, 100, 40);
 

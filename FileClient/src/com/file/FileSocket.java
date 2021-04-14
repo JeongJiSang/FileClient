@@ -14,7 +14,7 @@ import com.common.FileBitConverter;
 import com.common.FileException;
 
 
-public class ClientSocket extends Socket implements Runnable {
+public class FileSocket extends Socket implements Runnable {
 	private Thread thread = null;
 	private InputStream receiver = null;
 	private OutputStream sender = null;
@@ -26,7 +26,7 @@ public class ClientSocket extends Socket implements Runnable {
 	/**
 	 * 생성자
 	 */
-	public ClientSocket(ClientAddress address, File savefile) throws IOException {
+	public FileSocket(ClientAddress address, File savefile) throws IOException {
 		this.savefile = savefile;
 		this.address = address;
 		thread = new Thread(this);
