@@ -19,13 +19,15 @@ public class LoginView extends JFrame{
 	JButton 		jbtn_join  = new JButton("회원가입");
 	Font 			font 	   = new Font("고딕체",Font.BOLD, 17);
 	
-	LoginView() {
+	protected LoginView() {
 		
 	}
-	LoginView(ActionHandler action) {
+	
+	protected LoginView(ActionHandler action) {
 		this.action = action;
+		initDisplay();
 	}
-	public void initDisplay() {
+	private void initDisplay() {
 
 		this.setLayout(null);
 		this.add(jlb_id);

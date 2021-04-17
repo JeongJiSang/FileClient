@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Stack;
 
+import com.common.Protocol;
 import com.file.ClientAddress;
 
 //전송관련 메소드를 전부 담당하는 클래스
@@ -31,15 +32,31 @@ public class ClientSocket extends Socket{
 		thread = new ClientThread(this);
 		thread.start();
 		//구분을 줘서 서버연결 성공 시 쓰레드 실행, 서버 연결 불가시 메세지 출력
-	}
-	/**
-	 *  로그인 시도 메소드
-	 */
-	public void checkLogin() {
 		
 	}
 	/**
-	 *  메소드
+	 *  요청 전송 메소드
+	 *  ProtocolNumber, String 입력 시 자동 전송
+	 */
+	public void send(String... str) throws IOException {
+		String msg = "";
+		for(int i=0;i<str.length;i++) {
+			if(i==str.length-1) 
+				msg = msg+str[i];
+			else 
+				msg = msg+str[i]+Protocol.seperator;				
+		}
+		oos.writeObject(msg);
+	}
+	/**
+	 *  로그인 시도 메소드
+	 * @throws IOException 
+	 */
+	public void checkLogin(String id, String pw) throws IOException {
+		send(Protocol.checkLogin, id, pw);
+	}
+	/**
+	 *  회원가입 메소드
 	 */
 	
 	/**

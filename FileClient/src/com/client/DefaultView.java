@@ -13,7 +13,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import com.common.Protocol;
+
 public class DefaultView extends JFrame{
+	ActionHandler action = null;
+	
 	JPanel jp_north = new JPanel();
 	JLabel jlb_name = new JLabel();  //사용자이름
 	//중단1
@@ -34,9 +38,13 @@ public class DefaultView extends JFrame{
 	JPanel jp_south   = new JPanel();
 	JButton jbtn_chat = new JButton("방 만들기");
 
+	public DefaultView(ActionHandler action) {
+		this.action=action;
+		jlb_name.setText(Protocol.myID);
+		initDisplay();
+	}
 	
-	
-	public void initDisplay() {
+	private void initDisplay() {
 		//상단
 		//절대값으로 위치 선정
 		//			jp_north.setBackground(Color.green);
@@ -73,7 +81,7 @@ public class DefaultView extends JFrame{
 		jtb_offline.addMouseListener(null);
 
 		//하단
-		jbtn_chat.addActionListener(null);
+		jbtn_chat.addActionListener(action);
 		jp_south.add(jbtn_chat);
 
 		//프레임
