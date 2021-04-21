@@ -1,5 +1,6 @@
 package com.client;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -28,6 +29,7 @@ public class ClientThread extends Thread{
 		action = new ActionHandler();// 액션리스너클래스 실행
 		logView = new LoginView(action);// 최초 로그인 뷰 실행
 		action.setInstance(logView, client); // 액션리스너클래스에 로그인뷰 주소번지 인입
+		chatRoomList = new Hashtable<String, ChatRoomView>();
 	}
 	/**
 	 * String으로 들어온 list 변환 메소드
@@ -65,9 +67,6 @@ public class ClientThread extends Thread{
 						action.setInstance(defView); //메인화면 띄움
 						logView.dispose();
 					}
-					defView = new DefaultView(action);
-					action.setInstance(defView);
-					
 				}break;
 				case Protocol.addUserView:{//111#
 					if(addView!=null) {
@@ -78,7 +77,7 @@ public class ClientThread extends Thread{
 					}
 					
 				}break;
-				case Protocol.addUser:{//110#
+				case Protocol.addUser:{//110#결과값
 					String result = st.nextToken();
 					if("성공".equals(result)) {
 						JOptionPane.showMessageDialog(addView, "님 가입을 환영합니다.");
@@ -106,6 +105,11 @@ public class ClientThread extends Thread{
 						oneRow.add(obj);
 						defView.dtm_offline.addRow(oneRow);
 					}
+				}break;
+				case Protocol.createRoomView:{//201#
+					ccView = new CreateChattingView(client, defView);
+					ccView.checkbox();
+					ccView.initDisplay();
 				}break;
 				case Protocol.createRoom:{//200#
 					String roomName = st.nextToken();

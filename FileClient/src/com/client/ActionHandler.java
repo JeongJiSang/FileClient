@@ -2,10 +2,14 @@ package com.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import com.common.Protocol;
 
-public class ActionHandler implements ActionListener{
+public class ActionHandler implements ActionListener, FocusListener{
 	private ClientSocket client = null;// 서버와 연결된 oos, ois가 상주하는 핵심 소켓클래스
 	
 	private LoginView logView = null;
@@ -70,5 +74,25 @@ public class ActionHandler implements ActionListener{
 			e.printStackTrace();
 		}
 	}
+	@Override
+	public void focusGained(FocusEvent fe) {
+		Object obj = fe.getSource();
+		
+		if(obj == addView.jtf_id ) {
+			addView.jtf_id.setText("");
+		}
+		else if(obj == addView.jtf_pw) {
+			addView.jtf_pw.setText("");
+		}
+		else if(obj == addView.jtf_name) {
+			addView.jtf_name.setText("");
+		}
+		
+	}
 
+	@Override
+	public void focusLost(FocusEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
