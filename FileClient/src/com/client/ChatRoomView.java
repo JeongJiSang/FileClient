@@ -16,7 +16,9 @@ import javax.swing.JTextField;
 import com.common.Protocol;
 
 public class ChatRoomView extends JFrame{
+	ActionHandler action = null;
 	ClientSocket client = null;
+	
 	String roomName = null;
 
 	JPanel	jp_first = new JPanel();//채팅내용 보여주는 부분.
@@ -32,7 +34,7 @@ public class ChatRoomView extends JFrame{
 
 	public ChatRoomView(ClientSocket client, String roomName) {
 		this.client = client;
-		this.roomName = roomName;
+		
 		this.setTitle("방 이름 : "+roomName + "  /  내 아이디 : "+Protocol.myID);
 		initDisplay();
 	}
@@ -47,15 +49,25 @@ public class ChatRoomView extends JFrame{
 		jtf_msg.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("message enter!");
-				String chtMsg = jtf_msg.getText();
+				try {
+					client.send(Protocol.sendMessage,roomName
+								,Protocol.myID,jtf_msg.getText());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				jtf_msg.setText("");
 			}
 		});
 		jbtn_send.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("button clicked!");
-				
+				try {
+					client.send(Protocol.sendMessage,roomName
+								,Protocol.myID,jtf_msg.getText());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				jtf_msg.setText("");
 			}
 		});
 		
