@@ -62,7 +62,7 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 			
 	//기본화면
 			else if(obj.equals(defView.jbtn_chat)) {
-				client.send(Protocol.createRoomView);
+				client.send(Protocol.createRoomView, Protocol.myID);
 			}
 	//유저선택화면
 	//		if(obj.equals(ccView.jbtn_create)) {

@@ -1,9 +1,11 @@
 package com.client;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -14,27 +16,31 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.common.Protocol;
+import com.file.ClientAddress;
+import com.file.FileSocket;
 
 public class ChatRoomView extends JFrame{
 	ActionHandler action = null;
 	ClientSocket client = null;
-	
 	String roomName = null;
 
 	JPanel	jp_first = new JPanel();//채팅내용 보여주는 부분.
 	JPanel	jp_first_south = new JPanel();//채팅메세지 입력 부분.
-	JPanel  jp_second = new JPanel();//채팅방에 있는 유저 및 나가기 버튼 부분.
+	JPanel  jp_second = new JPanel();//채팅방에 있는 유저 보여주기 & 나가기 버튼 부분.
 
 	JTextField jtf_msg = new JTextField(); 
 	JTextArea jta_display = new JTextArea();
-	JScrollPane jsp_display = new JScrollPane(jta_display);
+	JScrollPane jsp_display = new JScrollPane(jta_display,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+	        									, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 	JButton jbtn_send  = new JButton("전송");
 	JButton jbtn_exit  = new JButton("나가기");
+	
+	   Font font = new Font("고딕체",Font.BOLD,15);	
 
 	public ChatRoomView(ClientSocket client, String roomName) {
 		this.client = client;
-		
+		this.roomName = roomName;
 		this.setTitle("방 이름 : "+roomName + "  /  내 아이디 : "+Protocol.myID);
 		initDisplay();
 	}
@@ -75,10 +81,11 @@ public class ChatRoomView extends JFrame{
 		jbtn_exit.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent ae) {
 				System.out.println("exit!!");
+				dispose();
 				try {
-					client.send(roomName, Protocol.myID);
+					client.send(Protocol.closeRoom,roomName, Protocol.myID);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -86,7 +93,9 @@ public class ChatRoomView extends JFrame{
 			}
 		});
 		
-		jta_display.setFont(new Font("고딕체",Font.BOLD,20));
+		jta_display.setFont(font);
+		jta_display.setEditable(false);
+		jta_display.setLineWrap(true);
 
 		jp_first.setLayout(new BorderLayout());
 		jp_first.add("Center", jsp_display);
@@ -105,9 +114,11 @@ public class ChatRoomView extends JFrame{
 		this.setBounds(1000, 200, 500, 600);
 		//jf.setSize(500, 600);
 		this.setVisible(true);
+		
 	}
 	
 	public static void main(String[] args) {
 		new ChatRoomView();
 	}
+	
 }

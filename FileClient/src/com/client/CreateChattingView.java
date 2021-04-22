@@ -83,7 +83,7 @@ public class CreateChattingView extends JFrame{
 		//////
 		setTitle("초대 유저 선택");
 		setBounds(1150, 200, 300, 400);
-		setVisible(true);
+		setVisible(false);
 	}
 
 	
