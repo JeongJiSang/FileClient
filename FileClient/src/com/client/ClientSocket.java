@@ -58,7 +58,9 @@ public class ClientSocket extends Socket{
 	/**
 	 *  회원가입 메소드
 	 */
-	
+	public void addUser(String new_id, String new_pw, String new_name) throws IOException{
+		send(Protocol.addUser, new_id, new_pw, new_name);
+	}
 	/**
 	 *  메소드
 	 */
