@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 import com.common.Protocol;
@@ -106,12 +107,25 @@ public class ClientThread extends Thread{
 						defView.dtm_offline.addRow(oneRow);
 					}
 				}break;
-				case Protocol.createRoomView:{//201#
-					ccView = new CreateChattingView(client, defView);
-					ccView.checkbox();
-					ccView.initDisplay();
+				case Protocol.createRoomView:{//201
+					int onlineCount = defView.dtm_online.getRowCount();
+					ccView = new CreateChattingView(client,onlineCount);
+					
+					for(int i=0; i<onlineCount; i++) {
+						String dtmID = defView.dtm_online.getValueAt(i, 0).toString();
+						
+						if(!Protocol.myID.equals(dtmID)) {
+							//ccView.onlines[i] = dtmID; //dtm값을 배열에 넣기
+							//ccView.jcb_online[i] = new JCheckBox(ccView.onlines[i]); //배열의 값을 담은 체크박스 생성
+							ccView.jcb_online[i] = new JCheckBox(dtmID); //값을 담은 체크박스 생성
+							ccView.jp_center.add(ccView.jcb_online[i]); //체크박스를 패널에 추가
+							ccView.jcb_online[i].addItemListener(action); //이벤트 처리
+							action.setInstance(ccView);
+						}
+					}
+					
 				}break;
-				case Protocol.createRoom:{//200#
+				case Protocol.createRoom:{//200#roomName
 					String roomName = st.nextToken();
 					chatView = new ChatRoomView(client, roomName);
 					chatRoomList.put(roomName, chatView);
@@ -121,9 +135,9 @@ public class ClientThread extends Thread{
 					
 					
 				}break;
-				case Protocol.sendMessage:{//300#
-					String chat_id = st.nextToken();
+				case Protocol.sendMessage:{//300#roomName#id#msg
 					String roomName = st.nextToken();
+					String chat_id = st.nextToken();
 					String chat_msg = st.nextToken();
 					
 					boolean success = true;

@@ -7,9 +7,11 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JCheckBox;
+
 import com.common.Protocol;
 
-public class ActionHandler implements ActionListener, FocusListener{
+public class ActionHandler implements ActionListener, FocusListener, ItemListener{
 	private ClientSocket client = null;// 서버와 연결된 oos, ois가 상주하는 핵심 소켓클래스
 	
 	private LoginView logView = null;
@@ -56,15 +58,19 @@ public class ActionHandler implements ActionListener, FocusListener{
 				client.send(Protocol.addUserView);
 			}
 	//회원가입
+
 			
 	//기본화면
-			if(obj.equals(defView.jbtn_chat)) {
-				
+			else if(obj.equals(defView.jbtn_chat)) {
+				client.send(Protocol.createRoomView);
 			}
 	//유저선택화면
+	//		if(obj.equals(ccView.jbtn_create)) {
+				
+	//		}  CreateChattingView에서 익명클래스로 처리함.
 			
 	//채팅화면
-			if(obj.equals(chatView.jbtn_send)) {
+			else if(obj.equals(chatView.jbtn_send)) {
 				client.send(Protocol.sendMessage, chatView.jtf_msg.getText());
 			}
 	//파일전송화면
@@ -94,5 +100,17 @@ public class ActionHandler implements ActionListener, FocusListener{
 	public void focusLost(FocusEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void itemStateChanged(ItemEvent ie) {
+		Object obj = ie.getSource();
+		if(ie.getStateChange() == ie.SELECTED) {
+			ccView.selected_ID.add(((JCheckBox) ie.getSource()).getText()); //체크박스의 값 들어가야함.
+		}
+		
+		else if(ie.getStateChange() == ie.DESELECTED) {
+			ccView.selected_ID.remove(((JCheckBox) ie.getSource()).getText()); //체크박스의 값 들어가야함.
+		}
 	}
 }
