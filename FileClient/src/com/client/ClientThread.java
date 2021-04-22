@@ -111,9 +111,10 @@ public class ClientThread extends Thread{
 					ccView.checkbox();
 					ccView.initDisplay();
 				}break;
-				case Protocol.createRoom:{//200#
+				case Protocol.createRoom:{//200#roomName#id#chatMember
 					String roomName = st.nextToken();
 					chatView = new ChatRoomView(client, roomName);
+					//만들어진 채팅방을 Map으로 관리. 채팅방 이름을 key, 채팅방을 value.
 					chatRoomList.put(roomName, chatView);
 					
 				}break;
@@ -121,7 +122,7 @@ public class ClientThread extends Thread{
 					
 					
 				}break;
-				case Protocol.sendMessage:{//300#
+				case Protocol.sendMessage:{//300번#p_id(메세지 보낸사람)#roomName#chat_msg
 					String chat_id = st.nextToken();
 					String roomName = st.nextToken();
 					String chat_msg = st.nextToken();
