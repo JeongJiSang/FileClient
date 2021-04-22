@@ -19,9 +19,8 @@ import javax.swing.JPanel;
 import com.common.Protocol;
 
 public class CreateChattingView extends JFrame implements ItemListener{
-	//ActionHandler action = null;
+	ActionHandler action = null;
 	ClientSocket client = null;
-	DefaultView defView = null;
 	//선언부
 	String onlines[] = null;
 	List<String> selected_ID = new Vector<>();
@@ -35,41 +34,20 @@ public class CreateChattingView extends JFrame implements ItemListener{
 	
 	//생성자
 	
-	public CreateChattingView(ClientSocket client, DefaultView defView) {
-		this.client = client;
-		this.defView = defView;
+	public CreateChattingView(ActionHandler action) {
+		this.action = action;
+		initDisplay();
 	}
-	
-	//체크박스 생성 메소드
-	void checkbox() {
-		jp_center = new JPanel(new GridLayout(defView.dtm_online.getRowCount(),1,2,2)); //접속중 유저만큼 그리드레이아웃 만들기
-		onlines = new String[defView.dtm_online.getRowCount()]; 	  //dtm값 넣을 배열 크기 초기화
-		jcb_online = new JCheckBox[defView.dtm_online.getRowCount()]; //체크 박스 크기 초기화
-		
-		for(int i=0; i<defView.dtm_online.getRowCount(); i++) {    
-			if(!Protocol.myID.equals(defView.dtm_online.getValueAt(i, 0))) {//equals써보자
-				onlines[i]=defView.dtm_online.getValueAt(i, 0).toString(); //dtm값을 배열에 넣기
-				jcb_online[i] = new JCheckBox(onlines[i]); //배열의 값을 담은 체크박스 생성
-				jp_center.add(jcb_online[i]); //체크박스 패널에 추가
-				jcb_online[i].addItemListener(this); //이벤트 처리
-			}
-		}
-		
+	public CreateChattingView(ClientSocket client) {
+		this.client = client;
+		initDisplay();
 	}
 	
 	//화면처리부
-	public void initDisplay() {
+	private void initDisplay() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		jp_center.setBackground(Color.WHITE);
-		//채팅방 생성 버튼!!!
-		jbtn_create.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				
-			}
-		});
+		jbtn_create.addActionListener(action);
 		jlb_selectUser.setFont(new Font("고딕체", Font.BOLD, 15));
 		jp_north.add(jlb_selectUser);
 		jp_south.add(jbtn_create);

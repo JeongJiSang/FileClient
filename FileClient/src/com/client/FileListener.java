@@ -1,4 +1,4 @@
-package com.file;
+package com.client;
 
 public interface FileListener {
 	public void progressFileSizeAction(long complateSize, long filesize);

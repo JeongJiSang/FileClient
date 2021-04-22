@@ -30,6 +30,8 @@ public class ClientThread extends Thread{
 		logView = new LoginView(action);// 최초 로그인 뷰 실행
 		action.setInstance(logView, client); // 액션리스너클래스에 로그인뷰 주소번지 인입
 		chatRoomList = new Hashtable<String, ChatRoomView>();
+		ccView = new CreateChattingView(action);
+		action.setInstance(ccView);
 	}
 	/**
 	 * String으로 들어온 list 변환 메소드
@@ -107,9 +109,8 @@ public class ClientThread extends Thread{
 					}
 				}break;
 				case Protocol.createRoomView:{//201#
-					ccView = new CreateChattingView(client, defView);
-					ccView.checkbox();
-					ccView.initDisplay();
+					ccView = new CreateChattingView(action);
+					action.setInstance(ccView);
 				}break;
 				case Protocol.createRoom:{//200#
 					String roomName = st.nextToken();

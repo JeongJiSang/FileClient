@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.util.Stack;
 
 import com.common.Protocol;
-import com.file.ClientAddress;
 
 //전송관련 메소드를 전부 담당하는 클래스
 public class ClientSocket extends Socket{
