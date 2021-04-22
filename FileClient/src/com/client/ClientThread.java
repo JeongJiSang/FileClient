@@ -80,9 +80,11 @@ public class ClientThread extends Thread{
 				}break;
 				case Protocol.addUser:{//110#결과값
 					String result = st.nextToken();
-					if("성공".equals(result)) {
-						JOptionPane.showMessageDialog(addView, "님 가입을 환영합니다.");
+					if("success".equals(result)) {
+						JOptionPane.showMessageDialog(addView, addView.jtf_id.getText()+"님 가입을 환영합니다.");
 						addView.dispose();
+					}else if("fail".equals(result)) {
+						JOptionPane.showMessageDialog(addView, "이미 등록된 아이디 입니다.");
 					}
 				}break;
 				case Protocol.showUser:{//120#

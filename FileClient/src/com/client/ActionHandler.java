@@ -6,6 +6,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 
 import javax.swing.JCheckBox;
 
@@ -58,8 +59,16 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 				client.send(Protocol.addUserView);
 			}
 	//회원가입
-
-			
+			else if(obj.equals(addView.jbtn_join) || obj.equals(addView.jtf_id)) {
+				String new_id = addView.jtf_id.getText();
+				String new_pw = addView.jtf_pw.getText();
+				String new_name = addView.jtf_name.getText();
+				try {
+					client.addUser(new_id, new_pw, new_name);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 	//기본화면
 			else if(obj.equals(defView.jbtn_chat)) {
 				client.send(Protocol.createRoomView, Protocol.myID);
