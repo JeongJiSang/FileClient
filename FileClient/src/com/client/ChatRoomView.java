@@ -45,10 +45,6 @@ public class ChatRoomView extends JFrame{
 		initDisplay();
 	}
 	
-	public ChatRoomView() {
-		initDisplay();
-	}
-
 	private void initDisplay() {
 		
 		//채팅 메세지 보내기.
@@ -116,9 +112,4 @@ public class ChatRoomView extends JFrame{
 		this.setVisible(true);
 		
 	}
-	
-	public static void main(String[] args) {
-		new ChatRoomView();
-	}
-	
 }
