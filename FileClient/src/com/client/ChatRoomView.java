@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,6 +17,9 @@ import com.common.Protocol;
 
 public class ChatRoomView extends JFrame{
 	ActionHandler action = null;
+	ClientSocket client = null;
+	
+	String roomName = null;
 
 	JPanel	jp_first = new JPanel();
 	JPanel	jp_first_south = new JPanel();
@@ -27,6 +31,9 @@ public class ChatRoomView extends JFrame{
 	JButton jbtn_send  = new JButton("전송");
 
 	public ChatRoomView(ClientSocket client, String roomName) {
+		this.client = client;
+		this.roomName = roomName;
+		
 		this.setTitle("방 이름 : "+roomName + "  /  내 아이디 : "+Protocol.myID);
 		initDisplay();
 	}
@@ -35,13 +42,25 @@ public class ChatRoomView extends JFrame{
 		jtf_msg.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					client.send(Protocol.sendMessage,roomName
+								,Protocol.myID,jtf_msg.getText());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				jtf_msg.setText("");
 			}
 		});
 		jbtn_send.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					client.send(Protocol.sendMessage,roomName
+								,Protocol.myID,jtf_msg.getText());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				jtf_msg.setText("");
 			}
 		});
 		jta_display.setFont(new Font("고딕체",Font.BOLD,20));

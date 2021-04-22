@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 import com.common.Protocol;
@@ -30,8 +31,6 @@ public class ClientThread extends Thread{
 		logView = new LoginView(action);// 최초 로그인 뷰 실행
 		action.setInstance(logView, client); // 액션리스너클래스에 로그인뷰 주소번지 인입
 		chatRoomList = new Hashtable<String, ChatRoomView>();
-		ccView = new CreateChattingView(action);
-		action.setInstance(ccView);
 	}
 	/**
 	 * String으로 들어온 list 변환 메소드
@@ -108,11 +107,17 @@ public class ClientThread extends Thread{
 						defView.dtm_offline.addRow(oneRow);
 					}
 				}break;
-				case Protocol.createRoomView:{//201#
-					ccView = new CreateChattingView(action);
-					action.setInstance(ccView);
+				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
+					List<String> chatMember = decompose(st.nextToken());
+					ccView = new CreateChattingView(client,chatMember.size());
+					for(int i=0; i<chatMember.size(); i++) {
+							ccView.jcb_online[i] = new JCheckBox(chatMember.get(i)); //id 담은 체크박스 생성
+							ccView.jp_center.add(ccView.jcb_online[i]); //체크박스를 패널에 추가
+							ccView.jcb_online[i].addItemListener(action); //이벤트 처리
+							action.setInstance(ccView);
+					}
 				}break;
-				case Protocol.createRoom:{//200#
+				case Protocol.createRoom:{//200#roomName
 					String roomName = st.nextToken();
 					chatView = new ChatRoomView(client, roomName);
 					chatRoomList.put(roomName, chatView);
@@ -122,9 +127,13 @@ public class ClientThread extends Thread{
 					
 					
 				}break;
-				case Protocol.sendMessage:{//300#
-					String chat_id = st.nextToken();
+				case Protocol.Logout:{//130
+					defView.dispose();
+					//로그아웃했으면 소켓 소멸,,?
+				}break;
+				case Protocol.sendMessage:{//300#roomName#id#msg
 					String roomName = st.nextToken();
+					String chat_id = st.nextToken();
 					String chat_msg = st.nextToken();
 					
 					boolean success = true;
