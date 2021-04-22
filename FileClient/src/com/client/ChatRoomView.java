@@ -32,6 +32,7 @@ public class ChatRoomView extends JFrame{
 
 	public ChatRoomView(ClientSocket client, String roomName) {
 		this.client = client;
+		this.roomName = roomName;
 		
 		this.setTitle("방 이름 : "+roomName + "  /  내 아이디 : "+Protocol.myID);
 		initDisplay();

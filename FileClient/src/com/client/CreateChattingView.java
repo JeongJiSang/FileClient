@@ -29,8 +29,10 @@ public class CreateChattingView extends JFrame{
 	int onlineCount = 0;
 	
 	JPanel jp_north = new JPanel();
-	JPanel jp_center = new JPanel();
+	JPanel jp_center = null;
 	JPanel jp_south = new JPanel();
+	
+	GridLayout grid = null;
 	JLabel jlb_selectUser = new JLabel("접속중인 유저");
 	JCheckBox[] jcb_online = null;
 	JButton jbtn_create = new JButton("방 만들기");
@@ -55,8 +57,8 @@ public class CreateChattingView extends JFrame{
 		add("North",jp_north);
 		
 		///////중단
-		jp_center 	= new JPanel(new GridLayout(onlineCount,1,2,2)); //접속중 유저만큼 그리드레이아웃 만들기
-		//onlines 	= new String[onlineCount]; 	  //dtm값 넣을 배열 크기 초기화
+		grid = new GridLayout(onlineCount,1,2,2);
+		jp_center 	= new JPanel(grid); //접속중 유저만큼 그리드레이아웃 만들기
 		jcb_online = new JCheckBox[onlineCount]; //체크 박스 크기 초기화
 		jp_center.setBackground(Color.WHITE);
 		add("Center",jp_center);
