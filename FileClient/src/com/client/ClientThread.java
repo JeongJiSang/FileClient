@@ -111,15 +111,9 @@ public class ClientThread extends Thread{
 				}break;
 				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
 					List<String> chatMember = decompose(st.nextToken());
-					ccView = new CreateChattingView(client,chatMember.size());
-					for(int i=0; i<chatMember.size(); i++) {
-							ccView.jcb_online[i] = new JCheckBox(chatMember.get(i)); //id 담은 체크박스 생성
-							ccView.jp_center.add(ccView.jcb_online[i]); //체크박스를 패널에 추가
-							ccView.jcb_online[i].addItemListener(action); //이벤트 처리
-							action.setInstance(ccView);
-
-					}
-					ccView.setVisible(true);
+					System.out.println("클라이언트쓰레드"+chatMember);
+					ccView = new CreateChattingView(client, action, chatMember);
+					action.setInstance(ccView);
 				}break;
 				case Protocol.createRoom:{//200#roomName
 					String roomName = st.nextToken();
@@ -140,7 +134,7 @@ public class ClientThread extends Thread{
 						}
 					}
 				}break;
-				case Protocol.Logout:{//130
+				case Protocol.logout:{//130
 					defView.dispose();
 					//로그아웃했으면 소켓 소멸,,?
 				}break;
