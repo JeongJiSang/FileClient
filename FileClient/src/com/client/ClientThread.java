@@ -127,6 +127,10 @@ public class ClientThread extends Thread{
 					
 					
 				}break;
+				case Protocol.Logout:{//130
+					defView.dispose();
+					//로그아웃했으면 소켓 소멸,,?
+				}break;
 				case Protocol.sendMessage:{//300#roomName#id#msg
 					String roomName = st.nextToken();
 					String chat_id = st.nextToken();
