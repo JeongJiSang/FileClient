@@ -37,6 +37,7 @@ public class DefaultView extends JFrame{
 	//하단
 	JPanel jp_south   = new JPanel();
 	JButton jbtn_chat = new JButton("방 만들기");
+	JButton jbtn_logout = new JButton("로그아웃");
 
 	public DefaultView(ActionHandler action) {
 		this.action=action;
@@ -82,7 +83,9 @@ public class DefaultView extends JFrame{
 
 		//하단
 		jbtn_chat.addActionListener(action);
+		jbtn_logout.addActionListener(action);
 		jp_south.add(jbtn_chat);
+		jp_south.add(jbtn_logout);
 
 		//프레임
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

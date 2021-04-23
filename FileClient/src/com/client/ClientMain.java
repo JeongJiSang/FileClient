@@ -3,9 +3,6 @@ package com.client;
 import java.io.File;
 import java.io.IOException;
 
-import com.file.ClientAddress;
-import com.file.FileSocket;
-
 public class ClientMain {
 
 	public static void main(String[] args) {

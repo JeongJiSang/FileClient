@@ -1,4 +1,4 @@
-package com.file;
+package com.client;
 
 import java.net.InetSocketAddress;
 

@@ -80,9 +80,11 @@ public class ClientThread extends Thread{
 				}break;
 				case Protocol.addUser:{//110#결과값
 					String result = st.nextToken();
-					if("성공".equals(result)) {
-						JOptionPane.showMessageDialog(addView, "님 가입을 환영합니다.");
+					if("success".equals(result)) {
+						JOptionPane.showMessageDialog(addView, addView.jtf_id.getText()+"님 가입을 환영합니다.");
 						addView.dispose();
+					}else if("fail".equals(result)) {
+						JOptionPane.showMessageDialog(addView, "이미 등록된 아이디 입니다.");
 					}
 				}break;
 				case Protocol.showUser:{//120#
@@ -107,18 +109,11 @@ public class ClientThread extends Thread{
 						defView.dtm_offline.addRow(oneRow);
 					}
 				}break;
-				case Protocol.createRoomView:{//201#chatMember(나를 제외한 onlinUser들).
+				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
 					List<String> chatMember = decompose(st.nextToken());
-					ccView = new CreateChattingView(client, chatMember.size());
-					
-					for(int i=0; i<chatMember.size(); i++ ) {
-						ccView.jcb_online[i] = new JCheckBox(chatMember.get(i));
-						ccView.jp_center.add(ccView.jcb_online[i]);
-						ccView.jcb_online[i].addItemListener(action);
-						action.setInstance(ccView);
-					}
-					ccView.setVisible(true);
-					
+					System.out.println("클라이언트쓰레드"+chatMember);
+					ccView = new CreateChattingView(client, action, chatMember);
+					action.setInstance(ccView);
 				}break;
 				case Protocol.createRoom:{//200#roomName
 					String roomName = st.nextToken();
@@ -138,6 +133,10 @@ public class ClientThread extends Thread{
 							chatView.jta_display.append(id+" 님이 "+roomName+"에서 퇴장하셨습니다."+"\n");
 						}
 					}
+				}break;
+				case Protocol.logout:{//130
+					defView.dispose();
+					//로그아웃했으면 소켓 소멸,,?
 				}break;
 				case Protocol.sendMessage:{//300#roomName#id#msg
 					String roomName = st.nextToken();
