@@ -1,4 +1,4 @@
-package com.file;
+package com.client;
 
 import java.io.File;
 import java.io.FileInputStream;

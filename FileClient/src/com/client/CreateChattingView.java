@@ -21,12 +21,10 @@ import javax.swing.JPanel;
 import com.common.Protocol;
 
 public class CreateChattingView extends JFrame{
-	//ActionHandler action = null;
+	ActionHandler action = null;
 	ClientSocket client = null;
 	//선언부
-	String onlines[] = null;
 	List<String> selected_ID = new Vector<>();
-	int onlineCount = 0;
 	
 	JPanel jp_north = new JPanel();
 	JPanel jp_center = new JPanel();
@@ -39,17 +37,22 @@ public class CreateChattingView extends JFrame{
 	
 	//생성자
 	
-	public CreateChattingView(ClientSocket client, int onlineCount) {
-		this.client 	= client;
-		this.onlineCount = onlineCount;
+	public CreateChattingView(ClientSocket client,ActionHandler action, List<String> chatMember) {
+		this.client = client;
+		this.action = action;
+		jp_center.setLayout(new GridLayout(chatMember.size(), 1, 2, 2));
+		jcb_online = new JCheckBox[chatMember.size()];
+		for(int i=0; i<jcb_online.length;i++) {
+			
+			jcb_online[i] = new JCheckBox(chatMember.get(i));
+			jcb_online[i].addItemListener(action);
+			jp_center.add(jcb_online[i]);
+		}
 		initDisplay();
 	}
-	
-	
 	//화면처리부
-	public void initDisplay() {
+	private void initDisplay() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
-		
 		//////상단
 		jlb_selectUser.setFont(new Font("고딕체", Font.BOLD, 15));
 		jp_north.add(jlb_selectUser);
@@ -57,9 +60,6 @@ public class CreateChattingView extends JFrame{
 		add("North",jp_north);
 		
 		///////중단
-		//grid = new GridLayout(onlineCount,1,2,2);
-		jp_center 	= new JPanel(new GridLayout(onlineCount,1,2,2)); //접속중 유저만큼 그리드레이아웃 만들기
-		jcb_online = new JCheckBox[onlineCount]; //체크 박스 크기 초기화
 		jp_center.setBackground(Color.WHITE);
 		add("Center",jp_center);
 		
@@ -87,6 +87,4 @@ public class CreateChattingView extends JFrame{
 		setBounds(1150, 200, 300, 400);
 		setVisible(true);
 	}
-
-	
 }

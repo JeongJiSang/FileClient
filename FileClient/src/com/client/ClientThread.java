@@ -80,9 +80,11 @@ public class ClientThread extends Thread{
 				}break;
 				case Protocol.addUser:{//110#결과값
 					String result = st.nextToken();
-					if("성공".equals(result)) {
-						JOptionPane.showMessageDialog(addView, "님 가입을 환영합니다.");
+					if("success".equals(result)) {
+						JOptionPane.showMessageDialog(addView, addView.jtf_id.getText()+"님 가입을 환영합니다.");
 						addView.dispose();
+					}else if("fail".equals(result)) {
+						JOptionPane.showMessageDialog(addView, "이미 등록된 아이디 입니다.");
 					}
 				}break;
 				case Protocol.showUser:{//120#
@@ -109,23 +111,28 @@ public class ClientThread extends Thread{
 				}break;
 				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
 					List<String> chatMember = decompose(st.nextToken());
-					ccView = new CreateChattingView(client,chatMember.size());
-					for(int i=0; i<chatMember.size(); i++) {
-							ccView.jcb_online[i] = new JCheckBox(chatMember.get(i)); //id 담은 체크박스 생성
-							ccView.jp_center.add(ccView.jcb_online[i]); //체크박스를 패널에 추가
-							ccView.jcb_online[i].addItemListener(action); //이벤트 처리
-							action.setInstance(ccView);
-					}
+					System.out.println("클라이언트쓰레드"+chatMember);
+					ccView = new CreateChattingView(client, action, chatMember);
+					action.setInstance(ccView);
 				}break;
 				case Protocol.createRoom:{//200#roomName
 					String roomName = st.nextToken();
 					chatView = new ChatRoomView(client, roomName);
+					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
 					chatRoomList.put(roomName, chatView);
 					
 				}break;
-				case Protocol.closeRoom:{//210#
+				case Protocol.closeRoom:{//210#roomName#id
+					String roomName = st.nextToken();
+					String id = st.nextToken();
+					System.out.println(roomName+", "+id);
 					
-					
+					for(String room : chatRoomList.keySet()) {
+						if(room.equals(roomName)) {
+							chatView = chatRoomList.get(roomName);
+							chatView.jta_display.append(id+" 님이 "+roomName+"에서 퇴장하셨습니다."+"\n");
+						}
+					}
 				}break;
 				case Protocol.logout:{//130
 					defView.dispose();

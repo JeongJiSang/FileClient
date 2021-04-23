@@ -11,9 +11,9 @@ public class AddUserView extends JDialog{
 	JLabel 			jlb_id = new JLabel("아이디");
 	JLabel 			jlb_pw = new JLabel("비밀번호");
 	JLabel 			jlb_name = new JLabel("이름");
-	JTextField 		jtf_id = new JTextField("아이디를 설정해주세요.");
-	JTextField 		jtf_pw = new JTextField("비밀번호를 설정해주세요.");
-	JTextField 		jtf_name = new JTextField("이름을 입력해주세요.");
+	JTextField 		jtf_id = new JTextField("");
+	JTextField 		jtf_pw = new JTextField("");
+	JTextField 		jtf_name = new JTextField("");
 	JButton 		jbtn_join = new JButton("가입신청");
 
 	public AddUserView(ActionHandler action) {
@@ -51,7 +51,7 @@ public class AddUserView extends JDialog{
 		jbtn_join.setBounds(160, 270, 100, 40);
 
 		//dialog 세팅.
-		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		//this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 		this.setLayout(null);
 		this.setSize(400, 400);
 		this.setVisible(true);
