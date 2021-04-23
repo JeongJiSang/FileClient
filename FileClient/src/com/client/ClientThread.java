@@ -127,7 +127,7 @@ public class ClientThread extends Thread{
 					
 					
 				}break;
-				case Protocol.Logout:{//130
+				case Protocol.logout:{//130
 					defView.dispose();
 					//로그아웃했으면 소켓 소멸,,?
 				}break;
