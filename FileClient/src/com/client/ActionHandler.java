@@ -89,9 +89,10 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 	//		}  CreateChattingView에서 익명클래스로 처리함.
 			
 	//채팅화면
+			/*
 			else if(obj.equals(chatView.jbtn_send)) {
 				client.send(Protocol.sendMessage, chatView.jtf_msg.getText());
-			}
+			}*/
 	//파일전송화면
 			
 			

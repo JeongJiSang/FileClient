@@ -134,10 +134,22 @@ public class ClientThread extends Thread{
 						}
 					}
 				}break;
-				case Protocol.logout:{//130
+				/*
+				case Protocol.logout:{//130#myID#roomNames(Vector)
+					String id = st.nextToken();
+					List<String> roomNames = decompose(st.nextToken());
+					System.out.println("잘 넘어왔닝"+roomNames);
+					
+					for(String key : roomNames) {
+						
+						chatView = chatRoomList.get(key);
+						chatView.jta_display.append(id+" 님이 로그아웃 하셨습니다."+"\n");
+					}
 					defView.dispose();
+					
+					//defView.dispose();
 					//로그아웃했으면 소켓 소멸,,?
-				}break;
+				}break;*/
 				case Protocol.sendMessage:{//300#roomName#id#msg
 					String roomName = st.nextToken();
 					String chat_id = st.nextToken();
