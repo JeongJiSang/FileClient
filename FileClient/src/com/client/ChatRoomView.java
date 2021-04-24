@@ -14,6 +14,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 
 import com.common.Protocol;
 
@@ -26,11 +30,16 @@ public class ChatRoomView extends JFrame{
 	JPanel	jp_first_south = new JPanel();//채팅메세지 입력 부분.
 	JPanel  jp_second = new JPanel();//채팅방에 있는 유저 보여주기.
 	JPanel  jp_second_south = new JPanel();
-
+	
+	
+	StyledDocument sd_display = 
+			new DefaultStyledDocument(
+					new StyleContext());
 	JTextField jtf_msg = new JTextField(); 
-	JTextArea jta_display = new JTextArea();
+	//JTextArea jta_display = new JTextArea();
+	JTextPane jtp_display = new JTextPane(sd_display);
 	JTextArea jta_user_display = new JTextArea();//채팅방 유저 아이디 부분.
-	JScrollPane jsp_display = new JScrollPane(jta_display,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+	JScrollPane jsp_display = new JScrollPane(jtp_display,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
 	        									, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	JScrollPane jsp_user_display = new JScrollPane(jta_user_display,
 												JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
@@ -125,9 +134,9 @@ public class ChatRoomView extends JFrame{
 		});
 		
 		//show 채팅내용
-		jta_display.setFont(font);
-		jta_display.setEditable(false);
-		jta_display.setLineWrap(true);
+//		jta_display.setFont(font);
+//		jta_display.setEditable(false);
+//		jta_display.setLineWrap(true);
 		
 		//show 채팅방유저 
 		jta_user_display.setFont(font);
