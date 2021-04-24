@@ -1,14 +1,20 @@
 package com.client;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import com.common.Protocol;
 
 //서버로부터 수신받은 오브젝트를 처리하는 클래스
@@ -22,7 +28,11 @@ public class ClientThread extends Thread{
 	CreateChattingView ccView = null;
 	ChatRoomView chatView = null;
 	SelectFileView selectView = null;
-
+	
+	/************************
+	 * Key : roomName
+	 * Value : ChatRoomView
+	 ************************/
 	Map<String, ChatRoomView> chatRoomList= null;
 	
 	public ClientThread(ClientSocket client) {
@@ -125,13 +135,15 @@ public class ClientThread extends Thread{
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
 					String id = st.nextToken();
-					System.out.println(roomName+", "+id);
 					
 					for(String room : chatRoomList.keySet()) {
 						if(room.equals(roomName)) {
 							chatView = chatRoomList.get(roomName);
-							chatView.jta_display.append(id+" 님이 "+roomName+"에서 퇴장하셨습니다."+"\n");
+							chatView.sd_display.insertString(chatView.sd_display.getLength()
+									,id+" 님이 "+roomName+"에서 퇴장하셨습니다."+"\n"
+									,null);
 						}
+						System.out.println(chatView.sd_display.getLength());
 					}
 				}break;
 				case Protocol.logout:{//130
@@ -147,14 +159,20 @@ public class ClientThread extends Thread{
 					for(String room:chatRoomList.keySet()) {
 						if(room.equals(roomName)) {
 							chatView = chatRoomList.get(roomName); //주소번지 들어감
-							chatView.jta_display.append(chat_id+" : "+chat_msg+"\n");
+							chatView.sd_display.insertString(
+									chatView.sd_display.getLength()
+									,chat_id+" : "+chat_msg+"\n"
+									,null);
 							success = false;
 						}
 					}
 					if(success) {
 						chatView = new ChatRoomView(client, roomName);
 						chatRoomList.put(roomName, chatView);
-						chatView.jta_display.append(chat_id+" : "+chat_msg+"\n");
+						chatView.sd_display.insertString(
+								chatView.sd_display.getLength()
+								,chat_id+" : "+chat_msg+"\n"
+								,null);
 					}
 					
 				}break;
@@ -162,9 +180,33 @@ public class ClientThread extends Thread{
 					
 					
 				}break;
-				case Protocol.sendFile:{//320#
+				case Protocol.sendFile:{//320#roomName#id#fileName
+					System.out.println("ois read: "+msg);
+					String roomName = st.nextToken();
+					String id = st.nextToken();
+					String fileName = st.nextToken();
 					
-					
+					for(String room : chatRoomList.keySet()) {
+						if(room.equals(roomName)) {
+							chatView = chatRoomList.get(roomName);
+							chatView.sd_display.insertString(chatView.sd_display.getLength()
+									,"file: "+fileName+"\n"
+									,null);
+							
+							JButton jbtn_file = new JButton(fileName);
+							chatView.jtp_display.insertComponent(jbtn_file);
+							jbtn_file.addActionListener(new ActionListener() {
+
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									System.out.println(fileName+" : 버튼 눌렸나유??");
+									
+								}
+								
+							});
+							
+						}
+					}
 				}break;
 				}
 			} catch (Exception e) {
