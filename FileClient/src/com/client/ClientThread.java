@@ -134,7 +134,6 @@ public class ClientThread extends Thread{
 						}
 					}
 				}break;
-				/*
 				case Protocol.logout:{//130#myID#roomNames(Vector)
 					String id = st.nextToken();
 					List<String> roomNames = decompose(st.nextToken());
@@ -149,7 +148,7 @@ public class ClientThread extends Thread{
 					
 					//defView.dispose();
 					//로그아웃했으면 소켓 소멸,,?
-				}break;*/
+				}break;
 				case Protocol.sendMessage:{//300#roomName#id#msg
 					String roomName = st.nextToken();
 					String chat_id = st.nextToken();
