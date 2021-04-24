@@ -64,6 +64,7 @@ public class ClientSocket extends Socket{
 	 * @throws IOException 
 	 */
 	public void receive(String savePath) throws IOException {
+		//서버에 파일 수신 요청 내 채팅룸폴더, 가져올 파일 전송
 		File save = new File(savePath);
 		file = new FileSocket(fileAddress, save);
 	}
