@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Stack;
 
+import com.common.ClientAddress;
 import com.common.Protocol;
 
 //전송관련 메소드를 전부 담당하는 클래스

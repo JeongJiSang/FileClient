@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -25,7 +26,8 @@ public class ChatRoomView extends JFrame{
 	ActionHandler action = null;
 	ClientSocket client = null;
 	String roomName = null;
-
+	FileDialog fd = new FileDialog(this);
+	
 	JPanel	jp_first = new JPanel();//채팅내용 보여주는 부분.
 	JPanel	jp_first_south = new JPanel();//채팅메세지 입력 부분.
 	JPanel  jp_second = new JPanel();//채팅방에 있는 유저 보여주기.
@@ -48,9 +50,6 @@ public class ChatRoomView extends JFrame{
 	JButton jbtn_send  = new JButton("전송");
 	JButton jbtn_exit  = new JButton("나가기");
 	JButton jbtn_file  = new JButton("파일전송");
-	
-	FileDialog fd = new FileDialog(this);
-	
 	Font font = new Font("고딕체",Font.BOLD,15);	
 
 	public ChatRoomView(ClientSocket client, String roomName) {
@@ -117,14 +116,16 @@ public class ChatRoomView extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("file!!");
-			    fd.setDirectory("..");
+				fd.setDirectory("..");
 			    fd.setVisible(true);
 			    String fileName = fd.getFile();
 			    String filePath = fd.getDirectory();
 			    System.out.println(fileName);
 			    System.out.println(filePath);
+			    System.out.println(filePath+fileName);
 			    try {
+			    	File file = new File(filePath+fileName);
+			    	client.send(roomName, file);
 					client.send(Protocol.sendFile,roomName, filePath, fileName, Protocol.myID);
 				} catch (IOException e1) {
 					e1.printStackTrace();

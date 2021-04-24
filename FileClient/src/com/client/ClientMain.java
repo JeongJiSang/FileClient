@@ -3,6 +3,8 @@ package com.client;
 import java.io.File;
 import java.io.IOException;
 
+import com.common.ClientAddress;
+
 public class ClientMain {
 
 	public static void main(String[] args) {
