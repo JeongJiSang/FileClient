@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
@@ -18,13 +19,14 @@ public class FileSocket extends Socket implements Runnable {
 	private Thread thread = null;
 	private InputStream receiver = null;
 	private OutputStream sender = null;
+	private ObjectOutputStream oos = null;
 	private Stack<Exception> errorList = null;
 	private ClientAddress address = null;
 	private File savefile = null;
 	private FileListener listener = null;
 
 	/**
-	 * 생성자
+	 * 파일 전송 시 생성자
 	 */
 	public FileSocket(ClientAddress address, File savefile) throws IOException {
 		this.savefile = savefile;
@@ -39,6 +41,7 @@ public class FileSocket extends Socket implements Runnable {
 		super.connect(address);
 		receiver = getInputStream();
 		sender = getOutputStream();
+		oos = new ObjectOutputStream(getOutputStream());
 		thread.start();
 	}
 
@@ -135,9 +138,11 @@ public class FileSocket extends Socket implements Runnable {
 	/**
 	 * 파일 전송 메소드
 	 */
-	public void sendFile(File file) throws FileException, IOException {
+	public void sendFile(String roomName, File file) throws FileException, IOException {
 // 서버 접속
 		connection();
+//파일 저장 경로 전송
+		oos.writeObject(roomName);
 // 파라미터 체크
 		if (file == null) {
 			throw new FileException("File path not setting");
@@ -188,6 +193,7 @@ public class FileSocket extends Socket implements Runnable {
 			throw e;
 		} finally {
 			in.close();
+			close();
 		}
 	}
 

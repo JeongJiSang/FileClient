@@ -1,23 +1,30 @@
 package com.client;
 
-import java.awt.Frame;
+import java.awt.FileDialog;
+import java.io.File;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JFrame;
 
-public class SelectFileView extends Frame{
+public class SelectFileView extends FileDialog{
+	public SelectFileView(JFrame jf) {
+		super(jf);
+		this.setDirectory("..");
+		this.setVisible(true);
+		String fileName = this.getFile();
+		String filePath = this.getDirectory();
+	}
 	
-	JPanel jp_north = new JPanel();
-	JPanel jp_center = new JPanel();
-	JPanel jp_south = new JPanel();
-	JLabel jlb_selectUser = new JLabel("접속중인 유저");
-	JCheckBox[] jcb_online = null;
-	JCheckBox jcb_apple = null;
-	JButton jbtn_create = new JButton("방 만들기");
-	
-	public SelectFileView() {}
-	
-	
+	public static void main(String[] args) {
+		JFrame jf = new JFrame();
+		//SelectFileView s = new SelectFileView(jf);
+		
+		FileDialog fd = new FileDialog(jf);
+		fd.setDirectory("..");
+		fd.setVisible(true);
+		String fileName = fd.getFile();
+		String filePath = fd.getDirectory();
+		System.out.println(fileName);
+		System.out.println(filePath);
+		
+	}
 }

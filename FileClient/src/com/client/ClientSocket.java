@@ -1,5 +1,6 @@
 package com.client;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,14 +11,18 @@ import com.common.Protocol;
 
 //전송관련 메소드를 전부 담당하는 클래스
 public class ClientSocket extends Socket{
-	private ClientAddress address = null;
+	private ClientAddress fileAddress = null;
+	private FileSocket file = null;
+	/////////////////////////////////////////////////
+	private ClientAddress chatAddress = null;
 	public ObjectOutputStream oos = null;
 	public ObjectInputStream ois = null;
 	private Stack<Exception> errorList = null;
 	ClientThread thread = null;
 	
-	public ClientSocket(ClientAddress address) throws IOException {
-		this.address = address;
+	public ClientSocket(ClientAddress chat, ClientAddress file) throws IOException {
+		this.chatAddress = chat;
+		this.fileAddress = file;
 		connection();
 	}
 	
@@ -25,13 +30,12 @@ public class ClientSocket extends Socket{
 	 * 서버 접속 메소드
 	 */
 	private void connection() throws IOException {
-		super.connect(address);
+		super.connect(chatAddress);
 		oos = new ObjectOutputStream(getOutputStream());
 		ois = new ObjectInputStream(getInputStream());
 		thread = new ClientThread(this);
 		thread.start();
 		//구분을 줘서 서버연결 성공 시 쓰레드 실행, 서버 연결 불가시 메세지 출력
-		
 	}
 	/**
 	 *  요청 전송 메소드
@@ -48,38 +52,19 @@ public class ClientSocket extends Socket{
 		oos.writeObject(msg);
 	}
 	/**
-	 *  로그인 시도 메소드
+	 *  파일 전송 메소드
 	 * @throws IOException 
 	 */
-	public void checkLogin(String id, String pw) throws IOException {
-		send(Protocol.checkLogin, id, pw);
+	public void send(String roomName, File sendPath) throws IOException {
+		file = new FileSocket(fileAddress, sendPath);
+		file.sendFile(roomName, sendPath);
 	}
 	/**
-	 *  메소드
+	 * 파일 수신 메소드
+	 * @throws IOException 
 	 */
-	
-	/**
-	 *  메소드
-	 */
-
-	/**
-	 *  메소드
-	 */
-
-	/**
-	 *  메소드
-	 */
-
-	/**
-	 *  메소드
-	 */
-
-	/**
-	 *  메소드
-	 */
-
-	/**
-	 *  메소드
-	 */
-	
+	public void receive(String savePath) throws IOException {
+		File save = new File(savePath);
+		file = new FileSocket(fileAddress, save);
+	}
 }
