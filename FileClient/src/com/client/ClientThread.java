@@ -1,5 +1,6 @@
 package com.client;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -120,8 +121,12 @@ public class ClientThread extends Thread{
 					chatView = new ChatRoomView(client, roomName);
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
 					chatRoomList.put(roomName, chatView);
+					Vector<Object> oneRow = new Vector<Object>();
+					oneRow.add(roomName);
+					defView.dtm_room.addRow(oneRow);
 					
 				}break;
+				
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
 					String id = st.nextToken();
