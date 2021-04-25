@@ -121,12 +121,14 @@ public class ClientThread extends Thread{
 					chatView = new ChatRoomView(client, roomName);
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
 					chatRoomList.put(roomName, chatView);
+					
+					//////////옮기기
+					/*
 					Vector<Object> oneRow = new Vector<Object>();
 					oneRow.add(roomName);
 					defView.dtm_room.addRow(oneRow);
-					
+					*/
 				}break;
-				
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
 					String id = st.nextToken();
@@ -139,6 +141,17 @@ public class ClientThread extends Thread{
 						}
 					}
 				}break;
+				case Protocol.showRoom:{//202#serverRoomList(현재 서버에 있는 채팅방이름들)
+					List<String> serverRoomList = decompose(st.nextToken());
+					while(defView.dtm_room.getRowCount()>0) {
+						defView.dtm_room.removeRow(0);
+					}
+					for(Object obj:serverRoomList) { 
+						Vector<Object> oneRow = new Vector<Object>();
+						oneRow.add(obj);
+						defView.dtm_room.addRow(oneRow);
+					}
+				}break;
 				case Protocol.logout:{//130#myID#roomNames(Vector)
 					String id = st.nextToken();
 					List<String> roomNames = decompose(st.nextToken());
@@ -148,7 +161,6 @@ public class ClientThread extends Thread{
 							chatView = chatRoomList.get(key);
 							chatView.dispose(); //채팅뷰 꺼주기
 						}
-						
 						//client.close(); //소켓 소멸
 						//this.interrupt(); //스레드 멈추기.
 					}

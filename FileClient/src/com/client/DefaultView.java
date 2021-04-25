@@ -14,8 +14,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import com.client.AddTab.MyPanel;
-import com.client.AddTab.UserList;
 import com.common.Protocol;
 
 public class DefaultView extends JFrame {
@@ -66,10 +64,11 @@ public class DefaultView extends JFrame {
 		jlb_name.setText(Protocol.myID);
 		initDisplay();
 	}
+	/*
 	public DefaultView() {
 		jlb_name.setText(Protocol.myID);
 		initDisplay();
-	}
+	}*/
 	
 	private void initDisplay() {
 		this.add(jtap);
@@ -109,13 +108,12 @@ public class DefaultView extends JFrame {
 				tcm.getColumn(i).setCellRenderer(dtcr);
 			}
 			
-			jtb_online.addMouseListener(null);
 			jp_online.add(jlb_online);
 			jp_online.add(jsp_online);
 			jp_offline.add(jlb_offline);
 			jp_offline.add(jsp_offline);
-			jtb_online.addMouseListener(null);
-			jtb_offline.addMouseListener(null);
+			//jtb_online.addMouseListener(null);
+			//jtb_offline.addMouseListener(null);
 
 			// 하단
 			jbtn_chat.addActionListener(action);
@@ -161,7 +159,8 @@ public class DefaultView extends JFrame {
 		
 		}
 	}
+	/*
 	public static void main(String[] args) {
 	 new DefaultView();
-	}
+	}*/
 }
