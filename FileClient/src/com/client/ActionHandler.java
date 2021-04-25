@@ -9,6 +9,7 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 
 import com.common.Protocol;
 
@@ -84,10 +85,16 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 			}
 			
 	//유저선택화면
-	//		if(obj.equals(ccView.jbtn_create)) {
-				
-	//		}  CreateChattingView에서 익명클래스로 처리함.
-			
+			else if(obj.equals(ccView.jbtn_create)) {
+				String roomName = JOptionPane.showInputDialog("방 이름을 설정해주세요.");
+				try {
+					client.send(Protocol.createRoom,roomName
+							,Protocol.myID,ccView.selected_ID.toString());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				ccView.dispose();
+			}
 	//채팅화면
 			else if(obj.equals(chatView.jbtn_send)) {
 				client.send(Protocol.sendMessage, chatView.jtf_msg.getText());
