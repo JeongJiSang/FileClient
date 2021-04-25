@@ -57,8 +57,8 @@ public class ClientSocket extends Socket{
 	 * @throws IOException 
 	 */
 	public void send(String roomName, File sendPath) throws IOException {
-		file = new FileSocket(fileAddress, sendPath);
-		file.sendFile(roomName, sendPath);
+		file = new FileSocket(fileAddress, sendPath);//파일전송 소켓으로 접속.
+		file.sendFile(roomName, sendPath);//파일전송 Thread 실행.
 	}
 	/**
 	 * 파일 수신 메소드
@@ -66,7 +66,10 @@ public class ClientSocket extends Socket{
 	 */
 	public void receive(String savePath) throws IOException {
 		//서버에 파일 수신 요청 내 채팅룸폴더, 가져올 파일 전송
+		System.out.println("recieved savepath: "+savePath);
 		File save = new File(savePath);
+		System.out.println("File create: "+save);
 		file = new FileSocket(fileAddress, save);
+		System.out.println("file: "+file);
 	}
 }

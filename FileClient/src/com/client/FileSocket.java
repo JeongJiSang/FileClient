@@ -143,7 +143,7 @@ public class FileSocket extends Socket implements Runnable {
 // 서버 접속
 		connection();
 //파일 저장 경로 전송
-		oos.writeObject(roomName);
+		oos.writeObject(roomName);//FileSocket.run(); -> ois.read에서 받는다.
 // 파라미터 체크
 		if (file == null) {
 			throw new FileException("File path not setting");

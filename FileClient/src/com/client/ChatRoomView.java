@@ -1,6 +1,7 @@
 package com.client;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -9,8 +10,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -30,22 +33,25 @@ public class ChatRoomView extends JFrame{
 	
 	JPanel	jp_first = new JPanel();//채팅내용 보여주는 부분.
 	JPanel	jp_first_south = new JPanel();//채팅메세지 입력 부분.
-	JPanel  jp_second = new JPanel();//채팅방에 있는 유저 보여주기.
+	JPanel  jp_second = new JPanel();
 	JPanel  jp_second_south = new JPanel();
 	
+	JPanel  jp_file = new JPanel();
+	JPanel  jp_file_title = new JPanel();
+	JLabel	jlb_file_title = new JLabel("File Store");
 	
 	StyledDocument sd_display = 
 			new DefaultStyledDocument(
 					new StyleContext());
 	JTextField jtf_msg = new JTextField(); 
-	//JTextArea jta_display = new JTextArea();
 	JTextPane jtp_display = new JTextPane(sd_display);
-	JTextArea jta_user_display = new JTextArea();//채팅방 유저 아이디 부분.
+	
 	JScrollPane jsp_display = new JScrollPane(jtp_display,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
-	        									, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	JScrollPane jsp_user_display = new JScrollPane(jta_user_display,
+	        									, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	
+	JScrollPane jsp_file_display = new JScrollPane(jp_file,
 												JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
-												,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+												,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 	JButton jbtn_send  = new JButton("전송");
 	JButton jbtn_exit  = new JButton("나가기");
@@ -135,26 +141,35 @@ public class ChatRoomView extends JFrame{
 		});
 		
 		//show 채팅내용
-//		jta_display.setFont(font);
-//		jta_display.setEditable(false);
-//		jta_display.setLineWrap(true);
+		//jtp_display에 LineWrap필요....!!! 방법을 모름. 구글링 해도 못찾겠음 Tlqkf.
+		jtp_display.setFont(font);
+		jtp_display.setEditable(false);
+		jsp_display.setViewportView(jtp_display);//작동 되는지 모르겠음
 		
-		//show 채팅방유저 
-		jta_user_display.setFont(font);
-		jta_user_display.setEditable(false);
-
+		//채팅창.
 		jp_first.setLayout(new BorderLayout());
 		jp_first.add("Center", jsp_display);
 		jp_first.add("South", jp_first_south);
-
+		
+		//채팅msg입력 및 전송 버튼 부분.
 		jp_first_south.setLayout(new BorderLayout());
 		jp_first_south.add("Center",jtf_msg);
 		jp_first_south.add("East",jbtn_send);
 		
+		//전송된 파일 보여주는 부분.
 		jp_second.setLayout(new BorderLayout());
-		jp_second.add("Center", jsp_user_display);
-		jp_second.add("South", jp_second_south);
+		jp_second.add("Center", jp_file);
+		jp_second.add("North", jp_file_title);
+		jp_file.setLayout(new BoxLayout(jp_file, BoxLayout.Y_AXIS));
 		
+		//파일 panel title.(File Store)
+		jp_file_title.add("Center",jlb_file_title);
+		jp_file_title.setBackground(Color.DARK_GRAY);
+		jlb_file_title.setForeground(Color.WHITE);
+		jlb_file_title.setFont(font);
+		
+		//파일전송, 나가기 버튼 부분.
+		jp_second.add("South", jp_second_south);
 		jp_second_south.setLayout(new GridLayout(0,1,2,2));
 		jp_second_south.add(jbtn_file);
 		jp_second_south.add(jbtn_exit);
