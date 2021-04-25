@@ -64,11 +64,12 @@ public class CreateChattingView extends JFrame{
 		add("Center",jp_center);
 		
 		///////하단
+		jbtn_create.addActionListener(action);
 		jp_south.add(jbtn_create);
 		add("South",jp_south);
 		
-		//////채팅방 생성 버튼!!!
-		jbtn_create.addActionListener(new ActionListener() {
+		//////채팅방 생성 버튼!!! 이거 액션헨들러로 옮기자
+		/*jbtn_create.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				String roomName = JOptionPane.showInputDialog("방 이름을 설정해주세요.");
@@ -80,7 +81,7 @@ public class CreateChattingView extends JFrame{
 				}
 				dispose();
 			}
-		});
+		});*/
 		
 		//////
 		setTitle("초대 유저 선택");
