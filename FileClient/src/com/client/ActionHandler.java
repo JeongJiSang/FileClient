@@ -99,6 +99,13 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 			else if(obj.equals(chatView.jbtn_send)) {
 				client.send(Protocol.sendMessage, chatView.jtf_msg.getText());
 			}*/
+	//중간입장
+			else if(obj.equals(defView.jbtn_enter)) {
+				//디티엠 선택한 방이름 setText하기
+				
+				
+				
+			}
 	//파일전송화면
 			
 			

@@ -57,18 +57,13 @@ public class DefaultView extends JFrame {
 	JScrollPane jsp_room = new JScrollPane(jtb_room);
 	//하단
 	JPanel jp_south2= new JPanel();
-	JButton jbtn_goin = new JButton("입장하기");
+	JButton jbtn_enter = new JButton("입장하기");
 	
 	public DefaultView(ActionHandler action) {
 		this.action = action;
 		jlb_name.setText(Protocol.myID);
 		initDisplay();
 	}
-	/*
-	public DefaultView() {
-		jlb_name.setText(Protocol.myID);
-		initDisplay();
-	}*/
 	
 	private void initDisplay() {
 		this.add(jtap);
@@ -138,7 +133,6 @@ public class DefaultView extends JFrame {
 			jp_room.setBounds(0, 60, 500, 400);
 			jp_south2.setBounds(0, 500, 500, 40);
 			
-			
 			DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer(); // 디폴트테이블셀렌더러를 생성
 			dtcr.setHorizontalAlignment(SwingConstants.CENTER); // 렌더러의 가로정렬을 CENTER로
 			TableColumnModel tcm = jtb_room.getColumnModel(); // 정렬할 테이블의 컬럼모델을 가져옴
@@ -148,8 +142,8 @@ public class DefaultView extends JFrame {
 			jp_room.add(jlb_room);
 			jp_room.add(jsp_room);
 			
-			jbtn_goin.addActionListener(action);			
-			jp_south2.add(jbtn_goin);
+			jbtn_enter.addActionListener(action);			
+			jp_south2.add(jbtn_enter);
 			
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			JFrame.setDefaultLookAndFeelDecorated(true);
@@ -159,8 +153,4 @@ public class DefaultView extends JFrame {
 		
 		}
 	}
-	/*
-	public static void main(String[] args) {
-	 new DefaultView();
-	}*/
 }

@@ -112,7 +112,6 @@ public class ClientThread extends Thread{
 				}break;
 				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
 					List<String> chatMember = decompose(st.nextToken());
-					System.out.println("클라이언트쓰레드"+chatMember);
 					ccView = new CreateChattingView(client, action, chatMember);
 					action.setInstance(ccView);
 				}break;
@@ -121,13 +120,6 @@ public class ClientThread extends Thread{
 					chatView = new ChatRoomView(client, roomName);
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
 					chatRoomList.put(roomName, chatView);
-					
-					//////////옮기기
-					/*
-					Vector<Object> oneRow = new Vector<Object>();
-					oneRow.add(roomName);
-					defView.dtm_room.addRow(oneRow);
-					*/
 				}break;
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
