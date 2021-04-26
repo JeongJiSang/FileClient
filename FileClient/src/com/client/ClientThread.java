@@ -88,7 +88,7 @@ public class ClientThread extends Thread{
 					if(addView!=null) {
 						addView.toFront();
 					}else {
-						addView = new AddUserView(action);
+						addView = new AddUserView(client);
 						action.setInstance(addView);
 					}
 					

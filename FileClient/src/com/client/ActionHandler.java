@@ -62,9 +62,10 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 
 			} else if (obj.equals(logView.jbtn_join)) {
 				client.send(Protocol.addUserView);
+				
 				// 회원가입
 			}
-//				} else if (obj.equals(addView.jbtn_join) || obj.equals(addView.jtf_id)) {
+//			} else if (obj.equals(addView.jbtn_join) || obj.equals(addView.jtf_id)) {
 //				String new_id = addView.jtf_id.getText();
 //				String new_pw = addView.jtf_pw.getText();
 //				String new_name = addView.jtf_name.getText();
@@ -73,8 +74,8 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 //				} catch (IOException e1) {
 //					e1.printStackTrace();
 //				}
-//
-//			}
+
+			
 
 			// 기본화면
 			else if (obj.equals(defView.jbtn_chat)) {
