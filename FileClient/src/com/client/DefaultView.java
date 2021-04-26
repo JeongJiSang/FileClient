@@ -75,7 +75,7 @@ public class DefaultView extends JFrame {
 		secondjp.add(secondjlb);
 		jtap.addTab("방목록", new RoomList());
 
-		setTitle("코스모톡");
+		setTitle(Protocol.myID);
 		setBounds(650, 200, 500, 600);
 		setVisible(true);
 	}

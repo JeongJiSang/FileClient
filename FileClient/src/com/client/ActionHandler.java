@@ -84,6 +84,8 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 			}
 			
 	//유저선택화면
+			/* ccView에서 익명으로 처리한 이유: 중간 입장입장 경우에는 유저선택화면을 안거치기때문에 ccView를 인스턴스와 받을일이 없음.
+			 * 따라서 acionHandler에서 중간에 null이 뜨기때문에 에러뜸.
 			else if(obj.equals(ccView.jbtn_create)) {
 				String roomName = JOptionPane.showInputDialog("방 이름을 설정해주세요.");
 				try {
@@ -93,7 +95,7 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 					e.printStackTrace();
 				}
 				ccView.dispose();
-			}
+			}*/
 	//채팅화면
 			/*
 			else if(obj.equals(chatView.jbtn_send)) {
@@ -101,11 +103,11 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 			}*/
 	//중간입장
 			else if(obj.equals(defView.jbtn_enter)) {
-				//디티엠 선택한 방이름 setText하기
-				
-				
-				
+				//디티엠 선택한 방이름 getText하기 ->테이블 안됨, 방법있나..?
+				String roomName = getroomName();
+				client.send(Protocol.enterRoom,Protocol.myID,roomName);
 			}
+			
 	//파일전송화면
 			
 			
@@ -128,7 +130,13 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 		}
 		
 	}
-
+	
+	public String getroomName() { //위치 여기면 안됨, 아니면 선택했을때 getText되는 방법 찾기
+		int row = defView.jtb_room.getSelectedRow();
+		String roomName = defView.jtb_room.getValueAt(row, 0).toString();
+		return roomName;
+	}
+	
 	@Override
 	public void focusLost(FocusEvent e) {
 		// TODO Auto-generated method stub

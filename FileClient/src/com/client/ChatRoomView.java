@@ -50,6 +50,7 @@ public class ChatRoomView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					System.out.println("전송엔터 눌렸다 ");
 					client.send(Protocol.sendMessage,roomName
 								,Protocol.myID,jtf_msg.getText());
 				} catch (IOException e1) {
@@ -62,6 +63,7 @@ public class ChatRoomView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					System.out.println("전송버튼 눌렸다 ");
 					client.send(Protocol.sendMessage,roomName
 								,Protocol.myID,jtf_msg.getText());
 				} catch (IOException e1) {
