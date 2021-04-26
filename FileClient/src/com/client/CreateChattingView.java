@@ -64,10 +64,11 @@ public class CreateChattingView extends JFrame{
 		add("Center",jp_center);
 		
 		///////하단
+		//jbtn_create.addActionListener(action);
 		jp_south.add(jbtn_create);
 		add("South",jp_south);
 		
-		//////채팅방 생성 버튼!!!
+		//////채팅방 생성 버튼!!! 왜 익명클래스로 처리했는데 액션핸들러에 주석 추가함.
 		jbtn_create.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -123,9 +124,31 @@ public class ClientThread extends Thread{
 						defView.dtm_offline.addRow(oneRow);
 					}
 				}break;
+				case Protocol.logout:{//130#myID#roomNames(Vector)
+					String id = st.nextToken();
+					List<String> roomNames = decompose(st.nextToken());
+					if(id.equals(Protocol.myID)) {
+						defView.dispose(); //디폴트뷰 꺼주기
+						for(String key : chatRoomList.keySet()) {
+							chatView = chatRoomList.get(key);
+							chatView.dispose(); //채팅뷰 꺼주기
+						}
+						//client.close(); //소켓 소멸
+						//this.interrupt(); //스레드 멈추기.
+					}
+					else {
+						for(String clientRoom:chatRoomList.keySet()) {
+							for(String serverRoom:roomNames) {
+								if(serverRoom.equals(clientRoom)) {
+									chatView = chatRoomList.get(serverRoom);
+									chatView.sd_display.insertString(chatView.sd_display.getLength(), id+" 님이 로그아웃 하셨습니다."+"\n", null);
+								}
+							}
+						}
+					}
+				}break;
 				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
 					List<String> chatMember = decompose(st.nextToken());
-					System.out.println("클라이언트쓰레드"+chatMember);
 					ccView = new CreateChattingView(client, action, chatMember);
 					action.setInstance(ccView);
 				}break;
@@ -134,7 +157,28 @@ public class ClientThread extends Thread{
 					chatView = new ChatRoomView(client, roomName);
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
 					chatRoomList.put(roomName, chatView);
-					
+				}break;
+				case Protocol.showRoom:{//202#serverRoomList(현재 서버에 있는 채팅방이름들)
+					List<String> serverRoomList = decompose(st.nextToken());
+					while(defView.dtm_room.getRowCount()>0) {
+						defView.dtm_room.removeRow(0);
+					}
+					for(Object obj:serverRoomList) { 
+						Vector<Object> oneRow = new Vector<Object>();
+						oneRow.add(obj);
+						defView.dtm_room.addRow(oneRow);
+					}
+				}break;
+				case Protocol.enterRoom:{//203#id#roomName
+					String id = st.nextToken();
+					String roomName = st.nextToken();
+					if(id.equals(Protocol.myID)) {
+						chatView = new ChatRoomView(client, roomName);
+						chatRoomList.put(roomName, chatView);
+					}else {
+						chatView = chatRoomList.get(roomName);
+						chatView.sd_display.insertString(chatView.sd_display.getLength(), id+" 님이 중간입장 하셨습니다."+"\n", null);
+					}
 				}break;
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
@@ -149,10 +193,6 @@ public class ClientThread extends Thread{
 						}
 						System.out.println(chatView.sd_display.getLength());
 					}
-				}break;
-				case Protocol.logout:{//130
-					defView.dispose();
-					//로그아웃했으면 소켓 소멸,,?
 				}break;
 				case Protocol.sendMessage:{//300#roomName#id#msg
 					String roomName = st.nextToken();
@@ -170,7 +210,7 @@ public class ClientThread extends Thread{
 							success = false;
 						}
 					}
-					if(success) {
+					if(success) { //폼이 안켜져있는 경우
 						chatView = new ChatRoomView(client, roomName);
 						chatRoomList.put(roomName, chatView);
 						chatView.sd_display.insertString(
