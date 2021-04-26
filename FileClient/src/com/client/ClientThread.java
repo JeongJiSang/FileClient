@@ -128,11 +128,12 @@ public class ClientThread extends Thread{
 					String id = st.nextToken();
 					List<String> roomNames = decompose(st.nextToken());
 					if(id.equals(Protocol.myID)) {
-						defView.dispose(); //디폴트뷰 꺼주기
 						for(String key : chatRoomList.keySet()) {
 							chatView = chatRoomList.get(key);
 							chatView.dispose(); //채팅뷰 꺼주기
 						}
+						System.exit(0); //x버튼 눌렀을때도 시스템 종료 고려
+						//defView.dispose(); //디폴트뷰 꺼주기
 						//client.close(); //소켓 소멸
 						//this.interrupt(); //스레드 멈추기.
 					}
@@ -149,10 +150,14 @@ public class ClientThread extends Thread{
 				}break;
 				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
 					List<String> chatMember = decompose(st.nextToken());
-					ccView = new CreateChattingView(client, action, chatMember);
-					action.setInstance(ccView);
+					if(defView.dtm_online.getRowCount()>=2) {
+						ccView = new CreateChattingView(client, action, chatMember);
+						action.setInstance(ccView);
+					}else {
+						JOptionPane.showMessageDialog(defView, "현재 접속중인 유저가 한 명 뿐입니다.", "메시지", JOptionPane.WARNING_MESSAGE);
+					}
 				}break;
-				case Protocol.createRoom:{//200#roomName
+				case Protocol.createRoom:{//200#roomName 
 					String roomName = st.nextToken();
 					chatView = new ChatRoomView(client, roomName);
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
@@ -160,6 +165,7 @@ public class ClientThread extends Thread{
 				}break;
 				case Protocol.showRoom:{//202#serverRoomList(현재 서버에 있는 채팅방이름들)
 					List<String> serverRoomList = decompose(st.nextToken());
+					
 					while(defView.dtm_room.getRowCount()>0) {
 						defView.dtm_room.removeRow(0);
 					}
@@ -169,29 +175,41 @@ public class ClientThread extends Thread{
 						defView.dtm_room.addRow(oneRow);
 					}
 				}break;
-				case Protocol.enterRoom:{//203#id#roomName
+				case Protocol.enterRoom:{//203#id#roomName#result
 					String id = st.nextToken();
 					String roomName = st.nextToken();
-					if(id.equals(Protocol.myID)) {
-						chatView = new ChatRoomView(client, roomName);
-						chatRoomList.put(roomName, chatView);
-					}else {
-						chatView = chatRoomList.get(roomName);
-						chatView.sd_display.insertString(chatView.sd_display.getLength(), id+" 님이 중간입장 하셨습니다."+"\n", null);
+					String result = st.nextToken();
+					if(result.equals("enter")) {
+						if(id.equals(Protocol.myID)) { //입장하는 본인일 경우
+							chatView = new ChatRoomView(client, roomName); //채팅룸뷰를 켜줌
+							chatRoomList.put(roomName, chatView); //입장한 클라이언트측에 방이름과 채팅룸의 주소번지 저장
+						}else { //본인이 아닌경우(원래 방에 있던 사람일 경우)
+							
+							//고치기!!!!
+							chatView = chatRoomList.get(roomName); 
+							//sendMessage를 거치지않은 초대받은 유저라면, chatRoom에 올라가있는 chatView가 없기 때문에 에러 발생
+							
+							chatView.sd_display.insertString(chatView.sd_display.getLength(), id+" 님이 중간입장 하셨습니다."+"\n", null);
+						}
+					} else if(result.equals("overlap")) {
+						JOptionPane.showMessageDialog(defView, "이미 입장하신 채팅방입니다.");
 					}
 				}break;
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
 					String id = st.nextToken();
-					
-					for(String room : chatRoomList.keySet()) {
-						if(room.equals(roomName)) {
-							chatView = chatRoomList.get(roomName);
-							chatView.sd_display.insertString(chatView.sd_display.getLength()
-									,id+" 님이 "+roomName+"에서 퇴장하셨습니다."+"\n"
-									,null);
+					if(id.equals(Protocol.myID)) {
+						chatRoomList.remove(roomName);
+					}else {
+						for(String room : chatRoomList.keySet()) {
+							if(room.equals(roomName)) {
+								chatView = chatRoomList.get(roomName);
+								chatView.sd_display.insertString(chatView.sd_display.getLength()
+										,id+" 님이 "+roomName+"에서 퇴장하셨습니다."+"\n"
+												,null);
+							}
+							System.out.println(chatView.sd_display.getLength());
 						}
-						System.out.println(chatView.sd_display.getLength());
 					}
 				}break;
 				case Protocol.sendMessage:{//300#roomName#id#msg
@@ -210,7 +228,7 @@ public class ClientThread extends Thread{
 							success = false;
 						}
 					}
-					if(success) { //폼이 안켜져있는 경우
+					if(success) { //폼이 안켜져있는 경우(초대된 애들)
 						chatView = new ChatRoomView(client, roomName);
 						chatRoomList.put(roomName, chatView);
 						chatView.sd_display.insertString(

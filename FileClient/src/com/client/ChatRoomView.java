@@ -80,7 +80,6 @@ public class ChatRoomView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					System.out.println("전송엔터 눌렸다 ");
 					client.send(Protocol.sendMessage,roomName
 								,Protocol.myID,jtf_msg.getText());
 				} catch (IOException e1) {
@@ -93,7 +92,8 @@ public class ChatRoomView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					System.out.println("전송버튼 눌렸다 ");
+					System.out.println("전송!!");
+					System.out.println("ClientSocket : "+client);
 					client.send(Protocol.sendMessage,roomName
 								,Protocol.myID,jtf_msg.getText());
 				} catch (IOException e1) {
@@ -105,7 +105,6 @@ public class ChatRoomView extends JFrame{
 		
 		//채팅방 나가기.
 		jbtn_exit.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				System.out.println("exit!!");

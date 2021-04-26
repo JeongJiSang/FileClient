@@ -72,14 +72,19 @@ public class CreateChattingView extends JFrame{
 		jbtn_create.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				String roomName = JOptionPane.showInputDialog("방 이름을 설정해주세요.");
-				try {
-					client.send(Protocol.createRoom,roomName
-							,Protocol.myID,selected_ID.toString());
-				} catch (IOException e) {
-					e.printStackTrace();
+				if(selected_ID.size()==0) {
+					JOptionPane.showMessageDialog(null, "선택된 유저가 없습니다.", "메시지", JOptionPane.WARNING_MESSAGE);
+				}else {
+					String roomName = JOptionPane.showInputDialog("방 이름을 설정해주세요.");
+					try {
+						client.send(Protocol.createRoom,roomName
+								,Protocol.myID,selected_ID.toString());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					dispose();
 				}
-				dispose();
+				
 			}
 		});
 		

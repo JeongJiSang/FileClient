@@ -29,14 +29,24 @@ public class DefaultView extends JFrame {
 	JPanel jp_online = new JPanel();
 	JLabel jlb_online = new JLabel("온라인");
 	String online[] = { "아이디" };
-	DefaultTableModel dtm_online = new DefaultTableModel(online, 0);
+	DefaultTableModel dtm_online = new DefaultTableModel(online,0){
+		@Override //셀 더블클릭 후 수정 안되도록 조정.
+		public boolean isCellEditable(int row, int column) {  //수정, 입력 불가
+			return false;
+		}
+	};
 	JTable jtb_online = new JTable(dtm_online);
 	JScrollPane jsp_online = new JScrollPane(jtb_online);
 	// 중단2
 	JPanel jp_offline = new JPanel();
 	JLabel jlb_offline = new JLabel("오프라인");
 	String offline[] = { "아이디" };
-	DefaultTableModel dtm_offline = new DefaultTableModel(online, 0);
+	DefaultTableModel dtm_offline = new DefaultTableModel(offline,0){
+		@Override //셀 더블클릭 후 수정 안되도록 조정.
+		public boolean isCellEditable(int row, int column) {  //수정, 입력 불가
+			return false;
+		}
+	};
 	JTable jtb_offline = new JTable(dtm_offline);
 	JScrollPane jsp_offline = new JScrollPane(jtb_offline);
 	// 하단
@@ -52,7 +62,12 @@ public class DefaultView extends JFrame {
 	JPanel jp_room = new JPanel();
 	JLabel jlb_room = new JLabel("방목록");
 	String room[] = { "방" };
-	DefaultTableModel dtm_room = new DefaultTableModel(room, 0);
+	DefaultTableModel dtm_room = new DefaultTableModel(room,0){
+		@Override //셀 더블클릭 후 수정 안되도록 조정.
+		public boolean isCellEditable(int row, int column) {  //수정, 입력 불가
+			return false;
+		}
+	};
 	JTable jtb_room = new JTable(dtm_room);
 	JScrollPane jsp_room = new JScrollPane(jtb_room);
 	//하단
