@@ -180,8 +180,7 @@ public class ChatRoomView extends JFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.add("Center", jp_first);
 		this.add("East", jp_second);
-		this.setBounds(1000, 200, 500, 600);
-		//jf.setSize(500, 600);
+		this.setBounds(650, 200, 500, 600);
 		this.setVisible(true);
 	}
 	

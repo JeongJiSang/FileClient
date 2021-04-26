@@ -56,9 +56,21 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 		Object obj = ae.getSource();
 		// 로그인뷰 액션
 		try {
-			if (obj.equals(logView.jbtn_login) || obj.equals(logView.jtf_pw)) {
-				Protocol.myID = logView.jtf_id.getText();
-				client.send(Protocol.checkLogin, logView.jtf_id.getText(), logView.jtf_pw.getText());
+			if (obj == logView.jbtn_login || obj == logView.jtf_pw) {
+				String id = logView.jtf_id.getText();
+				String pw = logView.jtf_pw.getText();
+				System.out.println(id+", "+pw);
+				boolean isOK = false;
+				if(!isOK) {
+					System.out.println("null 이다");
+					JOptionPane.showMessageDialog(logView, "내용을 입력해주세요.");
+					isOK = true;
+				}
+				else if(isOK){
+					System.out.println("지나감??");
+					Protocol.myID = logView.jtf_id.getText();
+					client.send(Protocol.checkLogin, logView.jtf_id.getText(), logView.jtf_pw.getText());
+				}
 
 			} else if (obj.equals(logView.jbtn_join)) {
 				client.send(Protocol.addUserView);
