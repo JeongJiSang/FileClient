@@ -35,6 +35,9 @@ public class FileSocket extends Socket implements Runnable {
 		thread = new Thread(this);
 		errorList = new Stack<Exception>();
 	}
+	
+	
+	
 	/**
 	 * 서버 접속 메소드
 	 */
@@ -143,7 +146,7 @@ public class FileSocket extends Socket implements Runnable {
 // 서버 접속
 		connection();
 //파일 저장 경로 전송
-		oos.writeObject(roomName);//FileSocket.run(); -> ois.read에서 받는다.
+		oos.writeObject("sds"+"#"+roomName);//FileSocket.run(); -> ois.read에서 받는다.
 // 파라미터 체크
 		if (file == null) {
 			throw new FileException("File path not setting");
@@ -204,7 +207,7 @@ public class FileSocket extends Socket implements Runnable {
 	private void receiveWrite(FileOutputStream out, int length, FileListener listener) throws Exception {
 //커넥션 체크
 		if (isClosed()) {
-			throw new SocketException("socket closed");
+			throw new SocketException("socket closedㅁㄴㅇㄴㅁ");
 		}
 		if (!isConnected()) {
 			throw new SocketException("socket diconnection");
