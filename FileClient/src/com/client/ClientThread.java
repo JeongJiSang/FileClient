@@ -205,7 +205,8 @@ public class ClientThread extends Thread{
 							chatView = chatRoomList.get(roomName); //주소번지 들어감
 							chatView.sd_display.insertString(
 									chatView.sd_display.getLength()
-									,chat_id+" : "+chat_msg+"\n"
+									,"<"+chat_id+">"+" : "
+									+chat_msg+"\n"
 									,null);
 							success = false;
 						}
@@ -215,7 +216,8 @@ public class ClientThread extends Thread{
 						chatRoomList.put(roomName, chatView);
 						chatView.sd_display.insertString(
 								chatView.sd_display.getLength()
-								,chat_id+" : "+chat_msg+"\n"
+								,"<"+chat_id+">"+" : "
+								+chat_msg+"\n"
 								,null);
 					}
 					
@@ -227,13 +229,18 @@ public class ClientThread extends Thread{
 				case Protocol.sendFile:{//320#roomName#id#fileName
 					System.out.println("ois read: "+msg);
 					String roomName = st.nextToken();
-					String id = st.nextToken();
+					String chat_id = st.nextToken();
 					String fileName = st.nextToken();
 					
+					boolean success = true;
 					for(String room : chatRoomList.keySet()) {
 						if(room.equals(roomName)) {
 							chatView = chatRoomList.get(roomName);
-							
+							chatView.sd_display.insertString(
+									chatView.sd_display.getLength()
+									,"<"+chat_id+">"+" 님이"+"==========="+"\n"
+									+"["+fileName+"]"+"을/를 전송하였습니다."+"\n"
+									,null);
 							//fileName으로된 JButton 생성.
 							//JButton jbtn_file = new JButton(fileName);
 							
@@ -297,7 +304,50 @@ public class ClientThread extends Thread{
 					            	jlb_file.setText("<html><a href=''>" + fileName + "</a></html>");
 					            }
 							});///////////////// addMouseListener //////
+							
+							success = false;
 						}
+					}
+					if(success) { //폼이 안켜져있는 경우
+						chatView = new ChatRoomView(client, roomName);
+						chatRoomList.put(roomName, chatView);
+						chatView.sd_display.insertString(
+								chatView.sd_display.getLength()
+								,"<"+chat_id+">"+" 님이"+"==========="+"\n"
+								+"["+fileName+"]"+"을/를 전송하였습니다."+"\n"
+								,null);
+						
+						//fileName으로된 JLbel 생성.
+						JLabel jlb_file = new JLabel(fileName);
+						System.out.println(jlb_file.getClass());
+						jlb_file.setForeground(Color.BLUE.darker());
+						jlb_file.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+						
+						//JLabel로 나타냄.
+						chatView.jp_file.add(jlb_file);
+						chatView.jp_file.revalidate();
+						
+						jlb_file.addMouseListener(new MouseAdapter() {
+						    @Override
+						    public void mouseClicked(MouseEvent e) {
+						    	System.out.println("label clicked");
+								String savePath = roomName+"\\"+fileName;
+								System.out.println(savePath);
+								try {
+									client.receive(savePath);
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+						    }
+				            @Override
+				            public void mouseExited(MouseEvent e) {
+				            	jlb_file.setText(fileName);
+				            }
+				            @Override
+				            public void mouseEntered(MouseEvent e) {
+				            	jlb_file.setText("<html><a href=''>" + fileName + "</a></html>");
+				            }
+						});///////////////// addMouseListener //////
 					}
 				}break;
 				}
