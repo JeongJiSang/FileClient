@@ -201,6 +201,7 @@ public class ClientThread extends Thread{
 					
 					boolean success = true;
 					for(String room:chatRoomList.keySet()) {
+						System.out.println("메시지 서버로 보내짐");
 						if(room.equals(roomName)) {
 							chatView = chatRoomList.get(roomName); //주소번지 들어감
 							chatView.sd_display.insertString(

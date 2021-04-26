@@ -112,6 +112,7 @@ public class DefaultView extends JFrame {
 
 			// 하단
 			jbtn_chat.addActionListener(action);
+			
 			jbtn_logout.addActionListener(action);
 			jp_south.add(jbtn_chat);
 			jp_south.add(jbtn_logout);
