@@ -233,57 +233,19 @@ public class ClientThread extends Thread{
 					for(String room : chatRoomList.keySet()) {
 						if(room.equals(roomName)) {
 							chatView = chatRoomList.get(roomName);
-							
-							//fileName으로된 JButton 생성.
-							//JButton jbtn_file = new JButton(fileName);
-							
-							//fileName으로된 JLbel 생성.
 							JLabel jlb_file = new JLabel(fileName);
 							System.out.println(jlb_file.getClass());
 							jlb_file.setForeground(Color.BLUE.darker());
 							jlb_file.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 							
-							
-							/* 
-							 * 이건 채팅창에 버튼 넣어주는거.
-							 * 버튼이든 라벨이든 insert는 가능하지만 채팅창 좌상단에 바로 꽂혀버림.
-							 * component가 계속 추가될 경우 수직방향으로 추가되는게 아니라, 수평방향으로 추가됨.
-							 */
-							//chatView.jtp_display.insertComponent(jbtn_file);
-							
-							//JButton으로 나타냄.
-//							chatView.jp_file.add(jbtn_file);
-//							chatView.jp_file.revalidate();
-							
-							//JLabel로 나타냄.
 							chatView.jp_file.add(jlb_file);
 							chatView.jp_file.revalidate();
-							
-//							jbtn_file.addActionListener(new ActionListener() {
-//								
-//								@Override
-//								public void actionPerformed(ActionEvent e) {
-//									System.out.println(fileName+": btn");
-//									String savePath = roomName+"\\"+fileName;
-//									System.out.println(savePath);
-//									try {
-//										client.receive(savePath);
-//									} catch (IOException e1) {
-//										e1.printStackTrace();
-//									}
-//									
-//								}
-//								
-//							});///////////////// addActionListener //////
 							
 							jlb_file.addMouseListener(new MouseAdapter() {
 							    @Override
 							    public void mouseClicked(MouseEvent e) {
-							    	System.out.println("label clicked");
-									String savePath = roomName+"\\"+fileName;
-									System.out.println(savePath);
 									try {
-										client.receive(savePath);
+										client.receive(roomName, fileName);
 									} catch (IOException e1) {
 										e1.printStackTrace();
 									}

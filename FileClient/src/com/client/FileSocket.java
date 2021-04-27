@@ -229,7 +229,15 @@ public class FileSocket extends Socket implements Runnable {
 			}
 		}
 	}
-
+	/**
+	 * 파일 수신 메소드
+	 * @throws IOException 
+	 */
+	public void receiveSend(String roomName, String fileName) throws IOException {
+		connection();
+		oos.writeObject("send"+"#"+roomName+"#"+fileName);
+	}
+	
 	public Exception getLastError() {
 		if (errorList.size() > 0) {
 			Exception e = errorList.pop();
