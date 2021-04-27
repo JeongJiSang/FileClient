@@ -125,7 +125,7 @@ public class ChatRoomView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				try {//204
-					client.send(Protocol.inviteUser,roomName);
+					client.send(Protocol.inviteUser,roomName,Protocol.myID);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
