@@ -51,6 +51,16 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 		Object obj = ae.getSource();
 		// 로그인뷰 액션
 		try {
+			if (obj.equals(logView.jbtn_login) || obj.equals(logView.jtf_pw)) {
+				Protocol.myID = logView.jtf_id.getText();
+				client.send(Protocol.checkLogin, logView.jtf_id.getText(), logView.jtf_pw.getText());
+
+			} else if (obj.equals(logView.jbtn_join)) {
+				client.send(Protocol.addUserView);
+			}
+			
+			// 로그인창에서 아무것도 입력안하고 버튼 눌렀을때 먹통현상 해결중 -상철님
+			/*
 			if (obj == logView.jbtn_login || obj == logView.jtf_pw) {
 				String id = logView.jtf_id.getText();
 				String pw = logView.jtf_pw.getText();
@@ -70,7 +80,7 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 			} else if (obj.equals(logView.jbtn_join)) {
 				client.send(Protocol.addUserView);
 
-			}
+			}*/
 
 		// 기본화면
 			else if (obj.equals(defView.jbtn_chat)) {

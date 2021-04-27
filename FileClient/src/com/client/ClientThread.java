@@ -31,6 +31,8 @@ public class ClientThread extends Thread{
 	 * Value : ChatRoomView
 	 ************************/
 	Map<String, ChatRoomView> chatRoomList= null;
+	Map<String, List<String>> chatRoomIDs = null; /////
+	
 	
 	public ClientThread(ClientSocket client) {
 		this.client = client;
@@ -38,6 +40,7 @@ public class ClientThread extends Thread{
 		logView = new LoginView(action);// 최초 로그인 뷰 실행
 		action.setInstance(logView, client); // 액션리스너클래스에 로그인뷰 주소번지 인입
 		chatRoomList = new Hashtable<String, ChatRoomView>();
+		chatRoomIDs = new Hashtable<String, List<String>>();
 	}
 	/**
 	 * String으로 들어온 list 변환 메소드

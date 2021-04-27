@@ -55,6 +55,7 @@ public class ChatRoomView extends JFrame{
 
 	JButton jbtn_send  = new JButton("전송");
 	JButton jbtn_exit  = new JButton("나가기");
+	JButton jbtn_invite  = new JButton("초대하기");
 	JButton jbtn_file  = new JButton("파일전송");
 	Font font = new Font("고딕체",Font.BOLD,15);	
 
@@ -78,26 +79,26 @@ public class ChatRoomView extends JFrame{
 		//채팅 메세지 보내기.
 		jtf_msg.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent ae) {
 				try {
 					client.send(Protocol.sendMessage,roomName
 								,Protocol.myID,jtf_msg.getText());
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 				jtf_msg.setText("");
 			}
 		});
 		jbtn_send.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent ae) {
 				try {
 					System.out.println("전송!!");
 					System.out.println("ClientSocket : "+client);
 					client.send(Protocol.sendMessage,roomName
 								,Protocol.myID,jtf_msg.getText());
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 				jtf_msg.setText("");
 			}
@@ -118,11 +119,25 @@ public class ChatRoomView extends JFrame{
 			}
 		});
 		
+		//초대하기
+		jbtn_invite.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				try {//204
+					client.send(Protocol.inviteUser,roomName);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		
 		//파일전송.
 		jbtn_file.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent ae) {
 				fd.setDirectory("..");
 			    fd.setVisible(true);
 			    String fileName = fd.getFile();
@@ -134,8 +149,8 @@ public class ChatRoomView extends JFrame{
 			    	File file = new File(filePath+fileName);
 			    	client.send(roomName, file);
 					client.send(Protocol.sendFile,roomName, filePath, fileName, Protocol.myID);
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 			
@@ -173,6 +188,7 @@ public class ChatRoomView extends JFrame{
 		jp_second.add("South", jp_second_south);
 		jp_second_south.setLayout(new GridLayout(0,1,2,2));
 		jp_second_south.add(jbtn_file);
+		jp_second_south.add(jbtn_invite);
 		jp_second_south.add(jbtn_exit);
 		
 		
