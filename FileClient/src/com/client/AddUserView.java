@@ -1,12 +1,19 @@
 package com.client;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import com.common.Protocol;
+
 public class AddUserView extends JDialog{
 	ActionHandler action = null;
+	ClientSocket client = null;
 	
 	JLabel 			jlb_id = new JLabel("아이디");
 	JLabel 			jlb_pw = new JLabel("비밀번호");
@@ -16,8 +23,9 @@ public class AddUserView extends JDialog{
 	JTextField 		jtf_name = new JTextField("");
 	JButton 		jbtn_join = new JButton("가입신청");
 
-	public AddUserView(ActionHandler action) {
-		this.action=action;
+	public AddUserView(ClientSocket client/*ActionHandler action*/) {
+		//this.action=action;
+		this.client = client;
 		initDisplay();
 	}
 	
@@ -45,8 +53,22 @@ public class AddUserView extends JDialog{
 
 		//버튼추가.
 		this.add(jbtn_join);
-		jbtn_join.addActionListener(action);
-
+		jbtn_join.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String new_id = jtf_id.getText();
+				String new_pw = jtf_pw.getText();
+				String new_name = jtf_name.getText();
+				try {
+					client.send(Protocol.addUser, new_id, new_pw, new_name);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
 		//버튼 위치 세팅.
 		jbtn_join.setBounds(160, 270, 100, 40);
 
