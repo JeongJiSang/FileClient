@@ -6,6 +6,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 import javax.swing.JCheckBox;
@@ -13,7 +15,8 @@ import javax.swing.JOptionPane;
 
 import com.common.Protocol;
 
-public class ActionHandler implements ActionListener, FocusListener, ItemListener {
+public class ActionHandler implements ActionListener, FocusListener, ItemListener
+																, WindowListener{
 	private ClientSocket client = null;// 서버와 연결된 oos, ois가 상주하는 핵심 소켓클래스
 
 	private LoginView logView = null;
@@ -54,19 +57,14 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 			if (obj == logView.jbtn_login || obj == logView.jtf_pw) {
 				String id = logView.jtf_id.getText();
 				String pw = logView.jtf_pw.getText();
-				System.out.println(id+", "+pw);
-				boolean isOK = false;
-				if(!isOK) {
-					System.out.println("null 이다");
-					JOptionPane.showMessageDialog(logView, "내용을 입력해주세요.");
-					isOK = true;
+				//로그인 할 때 ID, PW 미입력 체크 구간.
+				if(id.equals("")||pw.equals("")) {
+					JOptionPane.showMessageDialog(logView, "ID와 PW를 입력해주세요.");
 				}
-				else if(isOK){
-					System.out.println("지나감??");
+				else {
 					Protocol.myID = logView.jtf_id.getText();
 					client.send(Protocol.checkLogin, logView.jtf_id.getText(), logView.jtf_pw.getText());
 				}
-
 			} else if (obj.equals(logView.jbtn_join)) {
 				client.send(Protocol.addUserView);
 
@@ -147,5 +145,52 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 		else if (ie.getStateChange() == ie.DESELECTED) {
 			ccView.selected_ID.remove(((JCheckBox) ie.getSource()).getText()); // 체크박스의 값 들어가야함.
 		}
+	}
+	
+	//DefaultView에서 X버튼 눌렀을때 발생하는 이벤트 처리.
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent we) {
+		try {
+			client.send(Protocol.logout, Protocol.myID);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
