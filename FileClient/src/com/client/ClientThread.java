@@ -2,24 +2,17 @@ package com.client;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 import com.common.Protocol;
 
 //서버로부터 수신받은 오브젝트를 처리하는 클래스
@@ -32,7 +25,6 @@ public class ClientThread extends Thread{
 	DefaultView defView = null;
 	CreateChattingView ccView = null;
 	ChatRoomView chatView = null;
-	SelectFileView selectView = null;
 	
 	/************************
 	 * Key : roomName
@@ -157,7 +149,7 @@ public class ClientThread extends Thread{
 						JOptionPane.showMessageDialog(defView, "현재 접속중인 유저가 한 명 뿐입니다.", "메시지", JOptionPane.WARNING_MESSAGE);
 					}
 				}break;
-				case Protocol.createRoom:{//200#roomName 
+				case Protocol.createRoom:{//200#roomName
 					String roomName = st.nextToken();
 					chatView = new ChatRoomView(client, roomName);
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
@@ -169,7 +161,7 @@ public class ClientThread extends Thread{
 					while(defView.dtm_room.getRowCount()>0) {
 						defView.dtm_room.removeRow(0);
 					}
-					for(Object obj:serverRoomList) { 
+					for(Object obj:serverRoomList) {
 						Vector<Object> oneRow = new Vector<Object>();
 						oneRow.add(obj);
 						defView.dtm_room.addRow(oneRow);
@@ -208,7 +200,6 @@ public class ClientThread extends Thread{
 										,id+" 님이 "+roomName+"에서 퇴장하셨습니다."+"\n"
 												,null);
 							}
-							System.out.println(chatView.sd_display.getLength());
 						}
 					}
 				}break;
@@ -219,7 +210,6 @@ public class ClientThread extends Thread{
 					
 					boolean success = true;
 					for(String room:chatRoomList.keySet()) {
-						System.out.println("메시지 서버로 보내짐");
 						if(room.equals(roomName)) {
 							chatView = chatRoomList.get(roomName); //주소번지 들어감
 							chatView.sd_display.insertString(
@@ -246,7 +236,6 @@ public class ClientThread extends Thread{
 					
 				}break;
 				case Protocol.sendFile:{//320#roomName#id#fileName
-					System.out.println("ois read: "+msg);
 					String roomName = st.nextToken();
 					String chat_id = st.nextToken();
 					String fileName = st.nextToken();
@@ -265,7 +254,6 @@ public class ClientThread extends Thread{
 							
 							//fileName으로된 JLbel 생성.
 							JLabel jlb_file = new JLabel(fileName);
-							System.out.println(jlb_file.getClass());
 							jlb_file.setForeground(Color.BLUE.darker());
 							jlb_file.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 							
@@ -305,7 +293,6 @@ public class ClientThread extends Thread{
 						
 						//fileName으로된 JLbel 생성.
 						JLabel jlb_file = new JLabel(fileName);
-						System.out.println(jlb_file.getClass());
 						jlb_file.setForeground(Color.BLUE.darker());
 						jlb_file.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 						

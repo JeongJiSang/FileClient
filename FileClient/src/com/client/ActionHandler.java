@@ -21,7 +21,6 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 	private DefaultView defView = null;
 	private ChatRoomView chatView = null;
 	private CreateChattingView ccView = null;
-	private SelectFileView selectView = null;
 
 	ActionHandler() {
 	}
@@ -45,10 +44,6 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 
 	public void setInstance(CreateChattingView ccView) {
 		this.ccView = ccView;
-	}
-
-	public void setInstance(SelectFileView selectView) {
-		this.selectView = selectView;
 	}
 
 	@Override
