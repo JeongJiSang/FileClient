@@ -73,11 +73,29 @@ public class CreateChattingView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				String roomName = JOptionPane.showInputDialog("방 이름을 설정해주세요.");
-				try {
-					client.send(Protocol.createRoom,roomName
-							,Protocol.myID,selected_ID.toString());
-				} catch (IOException e) {
-					e.printStackTrace();
+				//채팅방이름 중복생성 check부분.
+				boolean success = true;
+				for(String room : client.thread.chatRoomList.keySet()) {
+					System.out.println("room: "+room);
+					if(roomName.equals(room)) {
+					   String re_roomName = JOptionPane.showInputDialog("이미 존재하는 방이름 입니다. \n 다시 작성해주세요.");
+						try {
+							client.send(Protocol.createRoom,re_roomName
+									,Protocol.myID,selected_ID.toString());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					   success = false;
+					   break;
+					}
+				}
+				if(success) {//중복된 방이름 없을때.
+					try {
+						client.send(Protocol.createRoom,roomName
+								,Protocol.myID,selected_ID.toString());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 				dispose();
 			}
