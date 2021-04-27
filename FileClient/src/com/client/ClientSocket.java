@@ -51,6 +51,7 @@ public class ClientSocket extends Socket{
 				msg = msg+str[i]+Protocol.seperator;				
 		}
 		oos.writeObject(msg);
+		System.out.println("send실행, 여기여기 oos : "+oos);
 	}
 	/**
 	 *  파일 전송 메소드
