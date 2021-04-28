@@ -150,6 +150,14 @@ public class ActionHandler implements ActionListener, FocusListener, ItemListene
 	@Override
 	public void itemStateChanged(ItemEvent ie) {
 		Object obj = ie.getSource();
+		
+		
+		//for(JCheckBox box : ccView.jcb_online) {
+		//	if(!box.isSelected()) {
+		//		box.setEnabled(false);
+		//	}
+		//}
+		
 		if (ie.getStateChange() == ie.SELECTED) {
 			ccView.selected_ID.add(((JCheckBox) ie.getSource()).getText()); // 체크박스의 값 들어가야함.
 		}

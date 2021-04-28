@@ -31,7 +31,6 @@ public class ClientThread extends Thread{
 	 * Value : ChatRoomView
 	 ************************/
 	Map<String, ChatRoomView> chatRoomList= null;
-	Map<String, List<String>> chatRoomIDs = null; /////
 	
 	
 	public ClientThread(ClientSocket client) {
@@ -40,7 +39,6 @@ public class ClientThread extends Thread{
 		logView = new LoginView(action);// 최초 로그인 뷰 실행
 		action.setInstance(logView, client); // 액션리스너클래스에 로그인뷰 주소번지 인입
 		chatRoomList = new Hashtable<String, ChatRoomView>();
-		chatRoomIDs = new Hashtable<String, List<String>>();
 	}
 	/**
 	 * String으로 들어온 list 변환 메소드
@@ -152,11 +150,14 @@ public class ClientThread extends Thread{
 						JOptionPane.showMessageDialog(defView, "현재 접속중인 유저가 한 명 뿐입니다.", "메시지", JOptionPane.WARNING_MESSAGE);
 					}
 				}break;
-				case Protocol.createRoom:{//200#roomName
+				case Protocol.createRoom:{//200#roomName#chatMember
 					String roomName = st.nextToken();
+					List<String> chatMember = decompose(st.nextToken());
 					chatView = new ChatRoomView(client, roomName);
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
+					chatMember.add(Protocol.myID);
 					chatRoomList.put(roomName, chatView);
+					//로그아웃, 나가기에 remove추가할 것
 				}break;
 				case Protocol.showRoom:{//202#serverRoomList(현재 서버에 있는 채팅방이름들)
 					List<String> serverRoomList = decompose(st.nextToken());
@@ -170,6 +171,7 @@ public class ClientThread extends Thread{
 						defView.dtm_room.addRow(oneRow);
 					}
 				}break;
+				/*
 				case Protocol.enterRoom:{//203#id#roomName#result
 					String id = st.nextToken();
 					String roomName = st.nextToken();
@@ -189,7 +191,7 @@ public class ClientThread extends Thread{
 					} else if(result.equals("overlap")) {
 						JOptionPane.showMessageDialog(defView, "이미 입장하신 채팅방입니다.");
 					}
-				}break;
+				}break;*/
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
 					String id = st.nextToken();
@@ -204,6 +206,36 @@ public class ClientThread extends Thread{
 												,null);
 							}
 						}
+					}
+				}break;
+				case Protocol.inviteUser:{//204#roomName#chatMember(나를 제외한 온라인 유저들)
+					String roomName = st.nextToken();
+					List<String> chatMember = decompose(st.nextToken());
+					ccView = new CreateChattingView(client, action, roomName,chatMember);
+					action.setInstance(ccView);
+				}break;
+				case Protocol.inviteUserEnter:{//205#roomName#chatMember(초대된 유저들)
+					String roomName = st.nextToken();
+					List<String> chatMember = decompose(st.nextToken());
+					
+					boolean success = true;
+					for(String room:chatRoomList.keySet()) {
+						if(room.equals(roomName)) {
+							chatView = chatRoomList.get(roomName); //주소번지 들어감
+							chatView.sd_display.insertString(
+									chatView.sd_display.getLength()
+									,"<"+chatMember+">"+" 님이 초대되었습니다. "
+									+"\n",null);
+							success = false;
+						}
+					}
+					if(success) { //폼이 안켜져있는 경우(초대된 애들)
+						chatView = new ChatRoomView(client, roomName);
+						chatRoomList.put(roomName, chatView);
+						chatView.sd_display.insertString(
+								chatView.sd_display.getLength()
+								,"<"+chatMember+">"+" 님이 초대되었습니다ㅎㅎㅎ. "
+								+"\n",null);
 					}
 				}break;
 				case Protocol.sendMessage:{//300#roomName#id#msg

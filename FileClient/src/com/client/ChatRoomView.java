@@ -66,8 +66,6 @@ public class ChatRoomView extends JFrame{
 		initDisplay();
 	}
 	
-	
-	
 	public ChatRoomView() {
 		initDisplay();
 	}

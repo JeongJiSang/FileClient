@@ -25,6 +25,7 @@ public class CreateChattingView extends JFrame{
 	ClientSocket client = null;
 	//선언부
 	List<String> selected_ID = new Vector<>();
+	String roomName = null;
 
 	JPanel jp_north = new JPanel();
 	JPanel jp_center = new JPanel();
@@ -34,12 +35,32 @@ public class CreateChattingView extends JFrame{
 	JLabel jlb_selectUser = new JLabel("접속중인 유저");
 	JCheckBox[] jcb_online = null;
 	JButton jbtn_create = new JButton("방 만들기");
+	JButton jbtn_invite = new JButton("추가 초대하기");
 
 	//생성자
 
 	public CreateChattingView(ClientSocket client,ActionHandler action, List<String> chatMember) {
 		this.client = client;
 		this.action = action;
+		checkBox(chatMember);
+		initDisplay();
+	}
+	
+	public CreateChattingView(ClientSocket client,ActionHandler action
+							, String roomName,List<String> chatMember){
+		this.client = client;
+		this.action = action;
+		this.roomName = roomName;
+		checkBox(chatMember);
+		initDisplay();
+		this.setTitle(roomName+"방 유저 추가 초대");
+		jp_south.add(jbtn_invite);
+		jp_south.remove(jbtn_create);
+	}
+	
+	
+	
+	void checkBox(List<String> chatMember) {
 		jp_center.setLayout(new GridLayout(chatMember.size(), 1, 2, 2));
 		jcb_online = new JCheckBox[chatMember.size()];
 		for(int i=0; i<jcb_online.length;i++) {
@@ -48,8 +69,10 @@ public class CreateChattingView extends JFrame{
 			jcb_online[i].addItemListener(action);
 			jp_center.add(jcb_online[i]);
 		}
-		initDisplay();
 	}
+	
+
+	
 	//화면처리부
 	private void initDisplay() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
@@ -80,7 +103,7 @@ public class CreateChattingView extends JFrame{
 					boolean success = true;
 					for(String room : client.thread.chatRoomList.keySet()) {
 						if(roomName.equals(room)) {
-							String re_roomName = JOptionPane.showInputDialog("이미 존재하는 방이름 입니다. \n 다시 작성해주세요.");
+							JOptionPane.showMessageDialog(jp_center,"이미 존재하는 방이름 입니다. \n 다시 작성해주세요.");
 							success = false;
 							break;
 						}
@@ -98,6 +121,29 @@ public class CreateChattingView extends JFrame{
 				}
 			}
 		});
+		
+		
+		//초대하기 버튼
+		jbtn_invite.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				if(selected_ID.size()==0) {
+					JOptionPane.showMessageDialog(null, "선택된 유저가 없습니다.", "메시지", JOptionPane.WARNING_MESSAGE);
+				}else {
+					try {
+						client.send(Protocol.inviteUserEnter,roomName,selected_ID.toString());
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						dispose();
+					}
+					
+				}
+			}
+		});
+		
+		
+		
 
 		//////
 		setTitle("초대 유저 선택");
