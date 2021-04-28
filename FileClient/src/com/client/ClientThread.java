@@ -140,10 +140,11 @@ public class ClientThread extends Thread{
 						}
 					}
 				}break;
-				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
+				case Protocol.createRoomView:{//201#chatMember(나를 제외한)#serverRooms
 					List<String> chatMember = decompose(st.nextToken());
+					List<String> serverRooms = decompose(st.nextToken());
 					if(defView.dtm_online.getRowCount()>=2) {
-						ccView = new CreateChattingView(client, action, chatMember);
+						ccView = new CreateChattingView(client, action, chatMember, serverRooms);
 						action.setInstance(ccView);
 					}else {
 						JOptionPane.showMessageDialog(defView, "현재 접속중인 유저가 한 명 뿐입니다.", "메시지", JOptionPane.WARNING_MESSAGE);

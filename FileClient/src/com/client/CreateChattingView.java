@@ -25,7 +25,10 @@ public class CreateChattingView extends JFrame{
 	ClientSocket client = null;
 	//선언부
 	List<String> selected_ID = new Vector<>();
-
+	
+	//서버에 저장된 채팅방이름들. 채팅방 이름 입력시, 중복체크를 위해 필요.
+	List<String> serverRooms = new Vector<>();
+	
 	JPanel jp_north = new JPanel();
 	JPanel jp_center = new JPanel();
 	JPanel jp_south = new JPanel();
@@ -37,9 +40,11 @@ public class CreateChattingView extends JFrame{
 
 	//생성자
 
-	public CreateChattingView(ClientSocket client,ActionHandler action, List<String> chatMember) {
+	public CreateChattingView(ClientSocket client, ActionHandler action
+								,List<String> chatMember, List<String> serverRooms) {
 		this.client = client;
 		this.action = action;
+		this.serverRooms = serverRooms;
 		jp_center.setLayout(new GridLayout(chatMember.size(), 1, 2, 2));
 		jcb_online = new JCheckBox[chatMember.size()];
 		for(int i=0; i<jcb_online.length;i++) {
@@ -77,7 +82,7 @@ public class CreateChattingView extends JFrame{
 					String roomName = JOptionPane.showInputDialog("방 이름을 설정해주세요.");
 					//채팅방이름 중복생성 check부분.
 					boolean success = true;
-					for(String room : client.thread.chatRoomList.keySet()) {
+					for(String room : serverRooms) {
 						if(roomName.equals(room)) {
 							JOptionPane.showMessageDialog(jp_center, "이미 존재하는 방이름 입니다. \n 다시 작성해주세요.");
 							success = false;
