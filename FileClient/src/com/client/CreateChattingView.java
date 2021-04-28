@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 
 import com.common.Protocol;
 
-public class CreateChattingView extends JFrame implements ItemListener{
+public class CreateChattingView extends JFrame{
     CreateChattingHandler ccHandler = null;
 	ClientSocket client = null;
 	//선언부
@@ -44,32 +44,31 @@ public class CreateChattingView extends JFrame implements ItemListener{
 	public CreateChattingView(ClientSocket client , List<String> chatMember, List<String> serverRooms) {
 		this.client = client;
 		this.serverRooms = serverRooms;
-		checkBox(chatMember);
 		ccHandler = new CreateChattingHandler();
 		ccHandler.setInstance(this,client);
+		checkBox(chatMember);
 		initDisplay();
 	}
 	
-	/*
-	public CreateChattingView(ClientSocket client,ActionHandler action
-							, String roomName,List<String> chatMember){
+	public CreateChattingView(ClientSocket client, String roomName,List<String> chatMember){
 		this.client = client;
-		this.action = action;
 		this.roomName = roomName;
-		checkBox(chatMember);
-		initDisplay();
 		this.setTitle(roomName+"방 유저 추가 초대");
 		jp_south.add(jbtn_invite);
 		jp_south.remove(jbtn_create);
-	}*/
-	
+		ccHandler = new CreateChattingHandler();
+		ccHandler.setInstance(this,client);
+		jbtn_invite.addActionListener(ccHandler);
+		checkBox(chatMember);
+		initDisplay();
+	}
 	
 	void checkBox(List<String> chatMember) {
 		jp_center.setLayout(new GridLayout(chatMember.size(), 1, 2, 2));
 		jcb_online = new JCheckBox[chatMember.size()];
 		for(int i=0; i<jcb_online.length;i++) {
 			jcb_online[i] = new JCheckBox(chatMember.get(i));
-			jcb_online[i].addItemListener(this);
+			jcb_online[i].addItemListener(ccHandler);
 			jp_center.add(jcb_online[i]);
 		}
 	}
@@ -93,32 +92,13 @@ public class CreateChattingView extends JFrame implements ItemListener{
 		jp_south.add(jbtn_create);
 		add("South",jp_south);
 
-		//초대하기 버튼  --옮기기
-		jbtn_invite.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				if(selected_ID.size()==0) {
-					JOptionPane.showMessageDialog(null, "선택된 유저가 없습니다.", "메시지", JOptionPane.WARNING_MESSAGE);
-				}else {
-					try {
-						client.send(Protocol.inviteUserEnter,roomName,selected_ID.toString());
-					} catch (IOException e) {
-						e.printStackTrace();
-					} finally {
-						dispose();
-					}
-					
-				}
-			} 
-		});
-		
-
 		//////
 		setTitle("초대 유저 선택");
 		setBounds(1150, 200, 300, 400);
 		setVisible(true);
 	}
 
+	/*
 	@Override //--옮기기
 	public void itemStateChanged(ItemEvent ie) {
 		Object obj = ie.getSource();
@@ -130,6 +110,6 @@ public class CreateChattingView extends JFrame implements ItemListener{
 			selected_ID.remove(((JCheckBox) ie.getSource()).getText()); // 체크박스의 값 들어가야함.
 		}
 		
-	}
+	}*/
 	
 }

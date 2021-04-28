@@ -37,7 +37,6 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 			else if(obj == chatView.jbtn_send) {
 				try {
 					System.out.println("전송!!");
-					System.out.println("ClientSocket : "+client);
 					client.send(Protocol.sendMessage,chatView.roomName
 								,Protocol.myID,chatView.jtf_msg.getText());
 				} catch (IOException e1) {

@@ -152,7 +152,6 @@ public class ClientThread extends Thread{
 					}
 				}break;
 				case Protocol.createRoom:{//200#roomName#chatMember
-					System.out.println("왔니3");
 					String roomName = st.nextToken();
 					chatView = new ChatRoomView(client,roomName);
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
@@ -211,8 +210,7 @@ public class ClientThread extends Thread{
 				case Protocol.inviteUser:{//204#roomName#chatMember(나를 제외한 온라인 유저들)
 					String roomName = st.nextToken();
 					List<String> chatMember = decompose(st.nextToken());
-					//ccView = new CreateChattingView(client, action, roomName,chatMember);
-					//action.setInstance(ccView);
+					ccView = new CreateChattingView(client,roomName,chatMember);
 				}break;
 				case Protocol.inviteUserEnter:{//205#roomName#chatMember(초대된 유저들)
 					String roomName = st.nextToken();
@@ -224,7 +222,7 @@ public class ClientThread extends Thread{
 							chatView = chatRoomList.get(roomName); //주소번지 들어감
 							chatView.sd_display.insertString(
 									chatView.sd_display.getLength()
-									,"<"+chatMember+">"+" 님이 초대되었습니다. "
+									,chatMember+" 님이 초대되었습니다. "
 									+"\n",null);
 							success = false;
 						}
@@ -234,7 +232,7 @@ public class ClientThread extends Thread{
 						chatRoomList.put(roomName, chatView);
 						chatView.sd_display.insertString(
 								chatView.sd_display.getLength()
-								,"<"+chatMember+">"+" 님이 초대되었습니다ㅎㅎㅎ. "
+								,chatMember+" 님이 초대되었습니다. "
 								+"\n",null);
 					}
 				}break;

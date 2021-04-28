@@ -43,7 +43,6 @@ public class CreateChattingHandler implements ActionListener,ItemListener{
 					}
 					if(success) {//중복된 방이름 없을때.
 						try {
-							System.out.println("보내져? roomName "+roomName);
 							client.send(Protocol.createRoom,roomName
 									,Protocol.myID,ccView.selected_ID.toString());
 						} catch (IOException e) {
@@ -54,7 +53,20 @@ public class CreateChattingHandler implements ActionListener,ItemListener{
 					}
 				}
 			}
-		}
+			else if(obj.equals(ccView.jbtn_invite)) {
+				if(ccView.selected_ID.size()==0) {
+					JOptionPane.showMessageDialog(null, "선택된 유저가 없습니다.", "메시지", JOptionPane.WARNING_MESSAGE);
+				}else {
+					try {
+						client.send(Protocol.inviteUserEnter,ccView.roomName,ccView.selected_ID.toString());
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						ccView.dispose();
+					}
+				}
+			}
+		}//////////////////////end of try
 			catch (Exception e) {
 			// TODO: handle exception
 		}
