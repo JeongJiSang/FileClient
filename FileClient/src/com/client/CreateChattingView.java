@@ -21,8 +21,8 @@ import javax.swing.JPanel;
 import com.common.Protocol;
 
 public class CreateChattingView extends JFrame{
-	ActionHandler action = null;
-	ClientSocket client = null;
+	CreatChattingHandler ccHandler = null;
+	
 	//선언부
 	List<String> selected_ID = new Vector<>();
 
@@ -37,15 +37,13 @@ public class CreateChattingView extends JFrame{
 
 	//생성자
 
-	public CreateChattingView(ClientSocket client,ActionHandler action, List<String> chatMember) {
-		this.client = client;
-		this.action = action;
+	public CreateChattingView(CreatChattingHandler ccHandler, List<String> chatMember) {
+		this.ccHandler = ccHandler;
 		jp_center.setLayout(new GridLayout(chatMember.size(), 1, 2, 2));
 		jcb_online = new JCheckBox[chatMember.size()];
 		for(int i=0; i<jcb_online.length;i++) {
-
 			jcb_online[i] = new JCheckBox(chatMember.get(i));
-			jcb_online[i].addItemListener(action);
+			jcb_online[i].addItemListener(ccHandler);
 			jp_center.add(jcb_online[i]);
 		}
 		initDisplay();
@@ -69,35 +67,7 @@ public class CreateChattingView extends JFrame{
 		add("South",jp_south);
 
 		//////채팅방 생성 버튼!!! 왜 익명클래스로 처리했는데 액션핸들러에 주석 추가함.
-		jbtn_create.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				if(selected_ID.size()==0) {
-					JOptionPane.showMessageDialog(null, "선택된 유저가 없습니다.", "메시지", JOptionPane.WARNING_MESSAGE);
-				}else {
-					String roomName = JOptionPane.showInputDialog("방 이름을 설정해주세요.");
-					//채팅방이름 중복생성 check부분.
-					boolean success = true;
-					for(String room : client.thread.chatRoomList.keySet()) {
-						if(roomName.equals(room)) {
-							String re_roomName = JOptionPane.showInputDialog("이미 존재하는 방이름 입니다. \n 다시 작성해주세요.");
-							success = false;
-							break;
-						}
-					}
-					if(success) {//중복된 방이름 없을때.
-						try {
-							client.send(Protocol.createRoom,roomName
-									,Protocol.myID,selected_ID.toString());
-						} catch (IOException e) {
-							e.printStackTrace();
-						} finally {
-							dispose();
-						}
-					}
-				}
-			}
-		});
+		jbtn_create.addActionListener(ccHandler);
 
 		//////
 		setTitle("초대 유저 선택");

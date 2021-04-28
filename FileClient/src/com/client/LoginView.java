@@ -9,7 +9,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LoginView extends JFrame{
-	ActionHandler action = null;
+	LoginHandler logHandler = null;
+	ClientSocket client = null;
 	
 	JLabel 			jlb_id = new JLabel("ID");
 	JLabel 			jlb_pw = new JLabel("PW");
@@ -19,14 +20,12 @@ public class LoginView extends JFrame{
 	JButton 		jbtn_join  = new JButton("회원가입");
 	Font 			font 	   = new Font("고딕체",Font.BOLD, 17);
 	
-	protected LoginView() {
-		
-	}
 	
-	protected LoginView(ActionHandler action) {
-		this.action = action;
+	protected LoginView(LoginHandler logHandler) {
+		this.logHandler = logHandler;
 		initDisplay();
 	}
+	
 	private void initDisplay() {
 
 		this.setLayout(null);
@@ -38,15 +37,15 @@ public class LoginView extends JFrame{
 		jlb_pw.setBounds(55, 250, 80, 40);
 
 		this.add(jtf_id);
-		jtf_pw.addActionListener(action);
+		jtf_pw.addActionListener(logHandler);
 		this.add(jtf_pw);
 		jtf_id.setBounds(120, 200, 185, 40);
 		jtf_pw.setBounds(120, 250, 185, 40);
 
-		jbtn_login.addActionListener(action);
+		jbtn_login.addActionListener(logHandler);
 		this.add(jbtn_login);
 		jbtn_login.setBounds(160, 300, 100, 40);
-		jbtn_join.addActionListener(action);
+		jbtn_join.addActionListener(logHandler);
 		this.add(jbtn_join);
 		jbtn_join.setBounds(160, 350, 100, 40);
 

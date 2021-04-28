@@ -12,8 +12,7 @@ import javax.swing.JTextField;
 import com.common.Protocol;
 
 public class AddUserView extends JDialog{
-	ActionHandler action = null;
-	ClientSocket client = null;
+	AddUserHandler addHandler = null;
 	
 	JLabel 			jlb_id = new JLabel("아이디");
 	JLabel 			jlb_pw = new JLabel("비밀번호");
@@ -23,14 +22,12 @@ public class AddUserView extends JDialog{
 	JTextField 		jtf_name = new JTextField("");
 	JButton 		jbtn_join = new JButton("가입신청");
 
-	public AddUserView(ClientSocket client/*ActionHandler action*/) {
-		//this.action=action;
-		this.client = client;
+	public AddUserView(AddUserHandler addHandler) {
+		this.addHandler = addHandler;
 		initDisplay();
 	}
 	
 	private void initDisplay() {
-
 		//라벨 추가.
 		this.add(jlb_id);
 		this.add(jlb_pw);
@@ -43,31 +40,22 @@ public class AddUserView extends JDialog{
 
 		//텍스트 필드 추가.
 		this.add(jtf_id);
+		jtf_id.addActionListener(addHandler);
 		this.add(jtf_pw);
+		jtf_pw.addActionListener(addHandler);
 		this.add(jtf_name);
-
+		jtf_name.addActionListener(addHandler);
+		
 		//텍스트 필드 위치 세팅.
+		
 		jtf_id.setBounds(120, 50, 180, 40);
 		jtf_pw.setBounds(120, 100, 180, 40);
 		jtf_name.setBounds(120, 150, 180, 40);
 
 		//버튼추가.
 		this.add(jbtn_join);
-		jbtn_join.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String new_id = jtf_id.getText();
-				String new_pw = jtf_pw.getText();
-				String new_name = jtf_name.getText();
-				try {
-					client.send(Protocol.addUser, new_id, new_pw, new_name);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				
-			}
-		});
+		jbtn_join.addActionListener(addHandler);
+		System.out.println("실행됨");
 		
 		//버튼 위치 세팅.
 		jbtn_join.setBounds(160, 270, 100, 40);

@@ -19,6 +19,10 @@ import com.common.Protocol;
 public class ClientThread extends Thread{
 	ClientSocket client = null;// 서버와 연결된 oos, ois가 상주하는 핵심 소켓클래스
 	ActionHandler action = null;
+	AddUserHandler addHandler = null;
+	LoginHandler logHandler = null;
+	DefHandler defHandler = null;
+	CreatChattingHandler ccHandler = null;
 	
 	LoginView logView = null;
 	AddUserView addView = null;
@@ -34,9 +38,9 @@ public class ClientThread extends Thread{
 	
 	public ClientThread(ClientSocket client) {
 		this.client = client;
-		action = new ActionHandler();// 액션리스너클래스 실행
-		logView = new LoginView(action);// 최초 로그인 뷰 실행
-		action.setInstance(logView, client); // 액션리스너클래스에 로그인뷰 주소번지 인입
+		logHandler = new LoginHandler();// 액션리스너클래스 실행
+		logView = new LoginView(logHandler);// 최초 로그인 뷰 실행
+		logHandler.setInstance(logView, client); // 액션리스너클래스에 로그인뷰 주소번지 인입
 		chatRoomList = new Hashtable<String, ChatRoomView>();
 	}
 	/**
@@ -70,9 +74,10 @@ public class ClientThread extends Thread{
 						JOptionPane.showMessageDialog(logView, "이미 로그인된 아이디입니다.");
 					}
 					else if(Protocol.myID.equals(result)) {
-						//온라인 리스트 벡터 가져오기
-						defView = new DefaultView(action);
-						action.setInstance(defView); //메인화면 띄움
+						//온라인 리스트 벡터 가져오기						
+						defHandler = new DefHandler();
+						defView = new DefaultView(defHandler);
+						defHandler.setInstance(defView,client); //메인화면 띄움
 						logView.dispose();
 					}
 				}break;
@@ -80,8 +85,9 @@ public class ClientThread extends Thread{
 					if(addView!=null) {
 						addView.toFront();
 					}else {
-						addView = new AddUserView(client);
-						action.setInstance(addView);
+						addHandler = new AddUserHandler();
+						addView = new AddUserView(addHandler);
+						addHandler.setInstance(addView, client);
 					}
 					
 				}break;
@@ -143,8 +149,9 @@ public class ClientThread extends Thread{
 				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
 					List<String> chatMember = decompose(st.nextToken());
 					if(defView.dtm_online.getRowCount()>=2) {
-						ccView = new CreateChattingView(client, action, chatMember);
-						action.setInstance(ccView);
+						ccHandler = new CreatChattingHandler();
+						ccView = new CreateChattingView(ccHandler, chatMember);
+						ccHandler.setInstance(ccView,client);
 					}else {
 						JOptionPane.showMessageDialog(defView, "현재 접속중인 유저가 한 명 뿐입니다.", "메시지", JOptionPane.WARNING_MESSAGE);
 					}
