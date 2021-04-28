@@ -18,8 +18,9 @@ public class CreateChattingHandler implements ActionListener,ItemListener{
 	CreateChattingHandler(){
 		
 	}
-	public void setInstance(CreateChattingView ccView) {
+	public void setInstance(CreateChattingView ccView,ClientSocket client) {
 		this.ccView = ccView;
+		this.client = client;
 	}
 	
 	@Override

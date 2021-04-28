@@ -80,7 +80,7 @@ public class ChatRoomView extends JFrame{
 		//채팅방 나가기.
 		jbtn_exit.addActionListener(crHandler);
 		
-		//초대하기 -옮기기
+		//초대하기 
 		jbtn_invite.addActionListener(crHandler);
 		
 		//파일 전송

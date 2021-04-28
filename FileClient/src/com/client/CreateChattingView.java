@@ -46,7 +46,7 @@ public class CreateChattingView extends JFrame implements ItemListener{
 		this.serverRooms = serverRooms;
 		checkBox(chatMember);
 		ccHandler = new CreateChattingHandler();
-		ccHandler.setInstance(this);
+		ccHandler.setInstance(this,client);
 		initDisplay();
 	}
 	
