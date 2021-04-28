@@ -17,7 +17,8 @@ import javax.swing.table.TableColumnModel;
 import com.common.Protocol;
 
 public class DefaultView extends JFrame {
-	ActionHandler action = null;
+	DefHandler defHandler = null;
+	ClientSocket client = null;
 	
 	JTabbedPane jtap = new JTabbedPane();
 	//유저목록 패널
@@ -74,15 +75,17 @@ public class DefaultView extends JFrame {
 	JPanel jp_south2= new JPanel();
 	JButton jbtn_enter = new JButton("입장하기");
 	
-	public DefaultView(ActionHandler action) {
-		this.action = action;
+	public DefaultView(ClientSocket client) {
+		this.client =client;
+		defHandler = new DefHandler();
+		defHandler.setInstance(this, client);
 		jlb_name.setText(Protocol.myID);
 		initDisplay();
 	}
 	
 	private void initDisplay() {
 		this.add(jtap);
-		this.addWindowListener(action);
+		this.addWindowListener(defHandler);
 		
 		firstjp.add(firstjlb);
 		jtap.addTab("유저목록", new UserList());
@@ -127,9 +130,9 @@ public class DefaultView extends JFrame {
 			//jtb_offline.addMouseListener(null);
 
 			// 하단
-			jbtn_chat.addActionListener(action);
+			jbtn_chat.addActionListener(defHandler);
 			
-			jbtn_logout.addActionListener(action);
+			jbtn_logout.addActionListener(defHandler);
 			jp_south.add(jbtn_chat);
 			jp_south.add(jbtn_logout);
 
@@ -159,7 +162,7 @@ public class DefaultView extends JFrame {
 			jp_room.add(jlb_room);
 			jp_room.add(jsp_room);
 			
-			jbtn_enter.addActionListener(action);			
+			jbtn_enter.addActionListener(defHandler);			
 			jp_south2.add(jbtn_enter);
 			
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

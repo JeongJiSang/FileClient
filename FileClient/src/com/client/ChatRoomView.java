@@ -28,8 +28,9 @@ import javax.swing.text.StyledDocument;
 import com.common.Protocol;
 
 public class ChatRoomView extends JFrame{
-	ActionHandler action = null;
+	ChatRoomHandler crHandler = null;
 	ClientSocket client = null;
+	
 	String roomName = null;
 	FileDialog fd = new FileDialog(this);
 	
@@ -61,146 +62,29 @@ public class ChatRoomView extends JFrame{
 	JButton jbtn_file  = new JButton("파일전송");
 	Font font = new Font("고딕체",Font.BOLD,15);	
 
-	public ChatRoomView(ClientSocket client, String roomName) {
+	public ChatRoomView(ClientSocket client,String roomName) {
 		this.client = client;
 		this.roomName = roomName;
+		crHandler = new ChatRoomHandler();
+		crHandler.setInstance(this, client,roomName);		
 		this.setTitle("방 이름 : "+roomName + "  /  내 아이디 : "+Protocol.myID);
 		initDisplay();
 	}
 	
-
-
 	private void initDisplay() {
 		
 		//채팅 메세지 보내기.
-		jtf_msg.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					client.send(Protocol.sendMessage,roomName
-								,Protocol.myID,jtf_msg.getText());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				jtf_msg.setText("");
-			}
-		});
-		jbtn_send.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					System.out.println("전송!!");
-					System.out.println("ClientSocket : "+client);
-					client.send(Protocol.sendMessage,roomName
-								,Protocol.myID,jtf_msg.getText());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				jtf_msg.setText("");
-			}
-		});
+		jtf_msg.addActionListener(crHandler);
+		jbtn_send.addActionListener(crHandler);
 		
 		//채팅방 나가기.
-		jbtn_exit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				System.out.println("exit!!");
-				dispose();
-				try {
-					client.send(Protocol.closeRoom,roomName, Protocol.myID);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-			}
-		});
+		jbtn_exit.addActionListener(crHandler);
 		
-		//초대하기
-		jbtn_invite.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {//204
-					client.send(Protocol.inviteUser,roomName,Protocol.myID);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		//초대하기 -옮기기
+		jbtn_invite.addActionListener(crHandler);
 		
-		//JFrame X버튼 눌렀을때 발생하는 이벤트.
-		this.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowClosing(WindowEvent we) {
-				try {
-					client.send(Protocol.closeRoom,roomName, Protocol.myID);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		
-		//파일전송.
-		jbtn_file.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				fd.setDirectory("..");
-			    fd.setVisible(true);
-			    String fileName = fd.getFile();
-			    String filePath = fd.getDirectory();
-			    System.out.println(fileName);
-			    System.out.println(filePath);
-			    System.out.println(filePath+fileName);
-			    try {
-			    	File file = new File(filePath+fileName);
-			    	client.send(roomName, file);
-					client.send(Protocol.sendFile,roomName, filePath, fileName, Protocol.myID);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			
-		});
+		//파일 전송
+		jbtn_file.addActionListener(crHandler);
 		
 		//show 채팅내용
 		jtp_display.setFont(font);
