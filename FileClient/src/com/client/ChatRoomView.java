@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -66,10 +68,6 @@ public class ChatRoomView extends JFrame{
 		initDisplay();
 	}
 	
-	public ChatRoomView() {
-		initDisplay();
-	}
-
 
 
 	private void initDisplay() {
@@ -130,6 +128,56 @@ public class ChatRoomView extends JFrame{
 			}
 		});
 		
+		//JFrame X버튼 눌렀을때 발생하는 이벤트.
+		this.addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowClosing(WindowEvent we) {
+				try {
+					client.send(Protocol.closeRoom,roomName, Protocol.myID);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		
 		//파일전송.
 		jbtn_file.addActionListener(new ActionListener() {
@@ -155,7 +203,6 @@ public class ChatRoomView extends JFrame{
 		});
 		
 		//show 채팅내용
-		//jtp_display에 LineWrap필요....!!! 방법을 모름. 구글링 해도 못찾겠음 Tlqkf.
 		jtp_display.setFont(font);
 		jtp_display.setEditable(false);
 		jsp_display.setViewportView(jtp_display);//작동 되는지 모르겠음
@@ -197,7 +244,4 @@ public class ChatRoomView extends JFrame{
 		this.setVisible(true);
 	}
 	
-	public static void main(String[] args) {
-		new ChatRoomView();
-	}
 }

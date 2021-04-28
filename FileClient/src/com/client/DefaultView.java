@@ -82,7 +82,8 @@ public class DefaultView extends JFrame {
 	
 	private void initDisplay() {
 		this.add(jtap);
-
+		this.addWindowListener(action);
+		
 		firstjp.add(firstjlb);
 		jtap.addTab("유저목록", new UserList());
 		

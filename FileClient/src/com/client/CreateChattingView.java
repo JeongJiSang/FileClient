@@ -27,6 +27,9 @@ public class CreateChattingView extends JFrame{
 	List<String> selected_ID = new Vector<>();
 	String roomName = null;
 
+	//서버에 저장된 채팅방이름들. 채팅방 이름 입력시, 중복체크를 위해 필요.
+	List<String> serverRooms = new Vector<>();
+	
 	JPanel jp_north = new JPanel();
 	JPanel jp_center = new JPanel();
 	JPanel jp_south = new JPanel();
@@ -39,9 +42,11 @@ public class CreateChattingView extends JFrame{
 
 	//생성자
 
-	public CreateChattingView(ClientSocket client,ActionHandler action, List<String> chatMember) {
+	public CreateChattingView(ClientSocket client, ActionHandler action
+								,List<String> chatMember, List<String> serverRooms) {
 		this.client = client;
 		this.action = action;
+		this.serverRooms = serverRooms;
 		checkBox(chatMember);
 		initDisplay();
 	}
@@ -59,12 +64,10 @@ public class CreateChattingView extends JFrame{
 	}
 	
 	
-	
 	void checkBox(List<String> chatMember) {
 		jp_center.setLayout(new GridLayout(chatMember.size(), 1, 2, 2));
 		jcb_online = new JCheckBox[chatMember.size()];
 		for(int i=0; i<jcb_online.length;i++) {
-
 			jcb_online[i] = new JCheckBox(chatMember.get(i));
 			jcb_online[i].addItemListener(action);
 			jp_center.add(jcb_online[i]);
@@ -91,19 +94,18 @@ public class CreateChattingView extends JFrame{
 		jp_south.add(jbtn_create);
 		add("South",jp_south);
 
-		//////채팅방 생성 버튼!!! 왜 익명클래스로 처리했는데 액션핸들러에 주석 추가함.
 		jbtn_create.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				if(selected_ID.size()==0) {
-					JOptionPane.showMessageDialog(null, "선택된 유저가 없습니다.", "메시지", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(jp_center, "선택된 유저가 없습니다.", "메시지", JOptionPane.WARNING_MESSAGE);
 				}else {
 					String roomName = JOptionPane.showInputDialog("방 이름을 설정해주세요.");
 					//채팅방이름 중복생성 check부분.
 					boolean success = true;
-					for(String room : client.thread.chatRoomList.keySet()) {
+					for(String room : serverRooms) {
 						if(roomName.equals(room)) {
-							JOptionPane.showMessageDialog(jp_center,"이미 존재하는 방이름 입니다. \n 다시 작성해주세요.");
+							JOptionPane.showMessageDialog(jp_center, "이미 존재하는 방이름 입니다. \n 다시 작성해주세요.");
 							success = false;
 							break;
 						}
