@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import com.common.Protocol;
 
 public class DefHandler implements ActionListener{
-	DefaultView defView = null;
-	ClientSocket client = null;
+	private DefaultView defView = null;
+	private ClientSocket client = null;
 	
 	public void setInstance(DefaultView defView,ClientSocket client) {
 		this.defView = defView;
@@ -23,6 +23,7 @@ public class DefHandler implements ActionListener{
 		Object obj = ae.getSource();
 		try {
 			if (obj.equals(defView.jbtn_chat)) {
+				System.out.println("눌림");
 				client.send(Protocol.createRoomView, Protocol.myID);
 
 			}

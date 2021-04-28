@@ -26,8 +26,9 @@ import javax.swing.text.StyledDocument;
 import com.common.Protocol;
 
 public class ChatRoomView extends JFrame{
-	ActionHandler action = null;
+	ChatRoomHandler crHandler = null;
 	ClientSocket client = null;
+	
 	String roomName = null;
 	FileDialog fd = new FileDialog(this);
 	
@@ -58,88 +59,27 @@ public class ChatRoomView extends JFrame{
 	JButton jbtn_file  = new JButton("파일전송");
 	Font font = new Font("고딕체",Font.BOLD,15);	
 
-	public ChatRoomView(ClientSocket client, String roomName) {
+	public ChatRoomView(ClientSocket client,String roomName) {
 		this.client = client;
 		this.roomName = roomName;
+		crHandler = new ChatRoomHandler();
+		crHandler.setInstance(this, client);		
 		this.setTitle("방 이름 : "+roomName + "  /  내 아이디 : "+Protocol.myID);
 		initDisplay();
 	}
 	
 	
-	
-	public ChatRoomView() {
-		initDisplay();
-	}
-
-
-
 	private void initDisplay() {
 		
 		//채팅 메세지 보내기.
-		jtf_msg.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					client.send(Protocol.sendMessage,roomName
-								,Protocol.myID,jtf_msg.getText());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				jtf_msg.setText("");
-			}
-		});
-		jbtn_send.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					System.out.println("전송!!");
-					System.out.println("ClientSocket : "+client);
-					client.send(Protocol.sendMessage,roomName
-								,Protocol.myID,jtf_msg.getText());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				jtf_msg.setText("");
-			}
-		});
+		jtf_msg.addActionListener(crHandler);
+		jbtn_send.addActionListener(crHandler);
 		
 		//채팅방 나가기.
-		jbtn_exit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				System.out.println("exit!!");
-				dispose();
-				try {
-					client.send(Protocol.closeRoom,roomName, Protocol.myID);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-			}
-		});
+		jbtn_exit.addActionListener(crHandler);
 		
 		//파일전송.
-		jbtn_file.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fd.setDirectory("..");
-			    fd.setVisible(true);
-			    String fileName = fd.getFile();
-			    String filePath = fd.getDirectory();
-			    System.out.println(fileName);
-			    System.out.println(filePath);
-			    System.out.println(filePath+fileName);
-			    try {
-			    	File file = new File(filePath+fileName);
-			    	client.send(roomName, file);
-					client.send(Protocol.sendFile,roomName, filePath, fileName, Protocol.myID);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-			
-		});
+		jbtn_file.addActionListener(crHandler);
 		
 		//show 채팅내용
 		//jtp_display에 LineWrap필요....!!! 방법을 모름. 구글링 해도 못찾겠음 Tlqkf.
@@ -183,7 +123,4 @@ public class ChatRoomView extends JFrame{
 		this.setVisible(true);
 	}
 	
-	public static void main(String[] args) {
-		new ChatRoomView();
-	}
 }

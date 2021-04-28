@@ -18,11 +18,12 @@ import com.common.Protocol;
 //서버로부터 수신받은 오브젝트를 처리하는 클래스
 public class ClientThread extends Thread{
 	ClientSocket client = null;// 서버와 연결된 oos, ois가 상주하는 핵심 소켓클래스
-	ActionHandler action = null;
+	
 	AddUserHandler addHandler = null;
 	LoginHandler logHandler = null;
 	DefHandler defHandler = null;
-	CreatChattingHandler ccHandler = null;
+	CreateChattingHandler ccHandler = null;
+	ChatRoomHandler crHandler = null;
 	
 	LoginView logView = null;
 	AddUserView addView = null;
@@ -38,9 +39,7 @@ public class ClientThread extends Thread{
 	
 	public ClientThread(ClientSocket client) {
 		this.client = client;
-		logHandler = new LoginHandler();// 액션리스너클래스 실행
-		logView = new LoginView(logHandler);// 최초 로그인 뷰 실행
-		logHandler.setInstance(logView, client); // 액션리스너클래스에 로그인뷰 주소번지 인입
+		logView = new LoginView(client);// 최초 로그인 뷰 실행
 		chatRoomList = new Hashtable<String, ChatRoomView>();
 	}
 	/**
@@ -74,10 +73,8 @@ public class ClientThread extends Thread{
 						JOptionPane.showMessageDialog(logView, "이미 로그인된 아이디입니다.");
 					}
 					else if(Protocol.myID.equals(result)) {
-						//온라인 리스트 벡터 가져오기						
-						defHandler = new DefHandler();
-						defView = new DefaultView(defHandler);
-						defHandler.setInstance(defView,client); //메인화면 띄움
+						//온라인 리스트 벡터 가져오기
+						defView = new DefaultView(client);
 						logView.dispose();
 					}
 				}break;
@@ -85,9 +82,7 @@ public class ClientThread extends Thread{
 					if(addView!=null) {
 						addView.toFront();
 					}else {
-						addHandler = new AddUserHandler();
-						addView = new AddUserView(addHandler);
-						addHandler.setInstance(addView, client);
+						addView = new AddUserView(client);
 					}
 					
 				}break;
@@ -147,18 +142,16 @@ public class ClientThread extends Thread{
 					}
 				}break;
 				case Protocol.createRoomView:{//201#chatMember(나를 제외한)
-					List<String> chatMember = decompose(st.nextToken());
-					if(defView.dtm_online.getRowCount()>=2) {
-						ccHandler = new CreatChattingHandler();
-						ccView = new CreateChattingView(ccHandler, chatMember);
-						ccHandler.setInstance(ccView,client);
+					List<String> chatMember = decompose(st.nextToken());		
+					if(defView.dtm_online.getRowCount()>=2) {				
+						ccView = new CreateChattingView(client, chatMember);
 					}else {
 						JOptionPane.showMessageDialog(defView, "현재 접속중인 유저가 한 명 뿐입니다.", "메시지", JOptionPane.WARNING_MESSAGE);
 					}
 				}break;
 				case Protocol.createRoom:{//200#roomName
 					String roomName = st.nextToken();
-					chatView = new ChatRoomView(client, roomName);
+					chatView = new ChatRoomView(client,roomName);
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
 					chatRoomList.put(roomName, chatView);
 				}break;
@@ -180,7 +173,7 @@ public class ClientThread extends Thread{
 					String result = st.nextToken();
 					if(result.equals("enter")) {
 						if(id.equals(Protocol.myID)) { //입장하는 본인일 경우
-							chatView = new ChatRoomView(client, roomName); //채팅룸뷰를 켜줌
+							chatView = new ChatRoomView(client,roomName); //채팅룸뷰를 켜줌
 							chatRoomList.put(roomName, chatView); //입장한 클라이언트측에 방이름과 채팅룸의 주소번지 저장
 						}else { //본인이 아닌경우(원래 방에 있던 사람일 경우)
 							
@@ -228,6 +221,7 @@ public class ClientThread extends Thread{
 						}
 					}
 					if(success) { //폼이 안켜져있는 경우(초대된 애들)
+						crHandler = new ChatRoomHandler();
 						chatView = new ChatRoomView(client, roomName);
 						chatRoomList.put(roomName, chatView);
 						chatView.sd_display.insertString(
@@ -290,7 +284,7 @@ public class ClientThread extends Thread{
 						}
 					}
 					if(success) { //폼이 안켜져있는 경우
-						chatView = new ChatRoomView(client, roomName);
+						chatView = new ChatRoomView(client,roomName);
 						chatRoomList.put(roomName, chatView);
 						chatView.sd_display.insertString(
 								chatView.sd_display.getLength()

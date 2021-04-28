@@ -21,8 +21,10 @@ public class LoginView extends JFrame{
 	Font 			font 	   = new Font("고딕체",Font.BOLD, 17);
 	
 	
-	protected LoginView(LoginHandler logHandler) {
-		this.logHandler = logHandler;
+	protected LoginView(ClientSocket client) {
+		this.client = client;
+		logHandler = new LoginHandler();
+		logHandler.setInstance(this, client);
 		initDisplay();
 	}
 	
