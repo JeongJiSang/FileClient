@@ -12,13 +12,11 @@ public class AddUserHandler implements ActionListener{
 	private AddUserView addView = null;
 	private ClientSocket client = null;
 	
-	AddUserHandler(){
-		
-	}
-	public void setInstance(AddUserView addView,ClientSocket client) {
+	AddUserHandler(AddUserView addView,ClientSocket client){
 		this.addView = addView;
-		this.client =client;
+		this.client = client;
 	}
+	
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		Object obj = ae.getSource();

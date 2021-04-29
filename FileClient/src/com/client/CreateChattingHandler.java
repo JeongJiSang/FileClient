@@ -76,7 +76,6 @@ public class CreateChattingHandler implements ActionListener,ItemListener{
 	public void itemStateChanged(ItemEvent ie) {
 		Object obj = ie.getSource();
 		if (ie.getStateChange() == ie.SELECTED) {
-			System.out.println("2");
 			ccView.selected_ID.add(((JCheckBox) ie.getSource()).getText()); // 체크박스의 값 들어가야함.
 		}
 

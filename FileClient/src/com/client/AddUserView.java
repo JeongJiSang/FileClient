@@ -13,7 +13,6 @@ import com.common.Protocol;
 
 public class AddUserView extends JDialog{
 	AddUserHandler addHandler = null;
-	ClientSocket client = null;
 	
 	JLabel 			jlb_id = new JLabel("아이디");
 	JLabel 			jlb_pw = new JLabel("비밀번호");
@@ -24,9 +23,7 @@ public class AddUserView extends JDialog{
 	JButton 		jbtn_join = new JButton("가입신청");
 
 	public AddUserView(ClientSocket client) {
-		this.client = client;
-		addHandler = new AddUserHandler();
-		addHandler.setInstance(this, client);
+		addHandler = new AddUserHandler(this,client);
 		initDisplay();
 	}
 	

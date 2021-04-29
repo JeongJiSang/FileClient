@@ -63,10 +63,8 @@ public class ChatRoomView extends JFrame{
 	Font font = new Font("고딕체",Font.BOLD,15);	
 
 	public ChatRoomView(ClientSocket client,String roomName) {
-		this.client = client;
 		this.roomName = roomName;
-		crHandler = new ChatRoomHandler();
-		crHandler.setInstance(this, client,roomName);		
+		crHandler = new ChatRoomHandler(this, client);
 		this.setTitle("방 이름 : "+roomName + "  /  내 아이디 : "+Protocol.myID);
 		initDisplay();
 	}

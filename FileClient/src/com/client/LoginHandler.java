@@ -10,11 +10,8 @@ import com.common.Protocol;
 public class LoginHandler implements ActionListener{
 	private LoginView logView = null;
 	private ClientSocket client = null;
-	LoginHandler(){
-		
-	}
 	
-	public void setInstance(LoginView logView,ClientSocket client) {
+	LoginHandler(LoginView logView,ClientSocket client){
 		this.logView = logView;
 		this.client = client;
 	}

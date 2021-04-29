@@ -22,9 +22,7 @@ public class LoginView extends JFrame{
 	
 	
 	protected LoginView(ClientSocket client) {
-		this.client = client;
-		logHandler = new LoginHandler();
-		logHandler.setInstance(this, client);
+		logHandler = new LoginHandler(this,client);
 		initDisplay();
 	}
 	

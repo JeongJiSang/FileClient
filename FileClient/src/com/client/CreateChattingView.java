@@ -55,12 +55,12 @@ public class CreateChattingView extends JFrame{
 		this.roomName = roomName;
 		this.setTitle(roomName+"방 유저 추가 초대");
 		jp_south.add(jbtn_invite);
-		jp_south.remove(jbtn_create);
 		ccHandler = new CreateChattingHandler();
 		ccHandler.setInstance(this,client);
 		jbtn_invite.addActionListener(ccHandler);
 		checkBox(chatMember);
 		initDisplay();
+		jp_south.remove(jbtn_create);
 	}
 	
 	void checkBox(List<String> chatMember) {
