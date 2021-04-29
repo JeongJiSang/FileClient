@@ -43,13 +43,12 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 			}
 			else if(obj == chatView.jbtn_invite) {
 				try {//204
-					client.send(Protocol.inviteUser,chatView.roomName,Protocol.myID);
+					client.send(Protocol.inviteUserView,chatView.roomName,Protocol.myID);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 			else if(obj == chatView.jbtn_exit) {
-				System.out.println("exit!!");
 				chatView.dispose();
 				try {
 					client.send(Protocol.closeRoom,chatView.roomName, Protocol.myID);
