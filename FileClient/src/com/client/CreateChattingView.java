@@ -49,7 +49,7 @@ public class CreateChattingView extends JFrame{
 		checkBox(chatMember);
 		initDisplay();
 	}
-	
+	//생성자
 	public CreateChattingView(ClientSocket client, String roomName,List<String> chatMember){
 		this.client = client;
 		this.roomName = roomName;

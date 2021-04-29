@@ -10,13 +10,10 @@ import com.common.Protocol;
 public class LoginHandler implements ActionListener{
 	private LoginView logView = null;
 	private ClientSocket client = null;
-	LoginHandler(){
-		
-	}
 	
-	public void setInstance(LoginView logView,ClientSocket client) {
-		this.logView = logView;
+	public LoginHandler(ClientSocket client, LoginView logView){
 		this.client = client;
+		this.logView = logView;
 	}
 	
 	@Override
@@ -33,7 +30,6 @@ public class LoginHandler implements ActionListener{
 					Protocol.myID = logView.jtf_id.getText();
 					client.send(Protocol.checkLogin, logView.jtf_id.getText(), logView.jtf_pw.getText());
 				}
-
 			} else if (obj.equals(logView.jbtn_join)) {
 				client.send(Protocol.addUserView);
 

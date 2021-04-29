@@ -170,27 +170,6 @@ public class ClientThread extends Thread{
 						defView.dtm_room.addRow(oneRow);
 					}
 				}break;
-				/*
-				case Protocol.enterRoom:{//203#id#roomName#result
-					String id = st.nextToken();
-					String roomName = st.nextToken();
-					String result = st.nextToken();
-					if(result.equals("enter")) {
-						if(id.equals(Protocol.myID)) { //입장하는 본인일 경우
-							chatView = new ChatRoomView(client,roomName); //채팅룸뷰를 켜줌
-							chatRoomList.put(roomName, chatView); //입장한 클라이언트측에 방이름과 채팅룸의 주소번지 저장
-						}else { //본인이 아닌경우(원래 방에 있던 사람일 경우)
-							
-							//고치기!!!!
-							chatView = chatRoomList.get(roomName); 
-							//sendMessage를 거치지않은 초대받은 유저라면, chatRoom에 올라가있는 chatView가 없기 때문에 에러 발생
-							
-							chatView.sd_display.insertString(chatView.sd_display.getLength(), id+" 님이 중간입장 하셨습니다."+"\n", null);
-						}
-					} else if(result.equals("overlap")) {
-						JOptionPane.showMessageDialog(defView, "이미 입장하신 채팅방입니다.");
-					}
-				}break;*/
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
 					String id = st.nextToken();
@@ -201,18 +180,17 @@ public class ClientThread extends Thread{
 							if(room.equals(roomName)) {
 								chatView = chatRoomList.get(roomName);
 								chatView.sd_display.insertString(chatView.sd_display.getLength()
-										,id+" 님이 "+roomName+"에서 퇴장하셨습니다."+"\n"
-												,null);
+										,id+" 님이 "+roomName+"에서 퇴장하셨습니다."+"\n", null);
 							}
 						}
 					}
 				}break;
-				case Protocol.inviteUser:{//204#roomName#chatMember(나를 제외한 온라인 유저들)
+				case Protocol.inviteUserView:{//204#roomName#chatMember(나를 제외한 온라인 유저들)
 					String roomName = st.nextToken();
 					List<String> chatMember = decompose(st.nextToken());
 					ccView = new CreateChattingView(client,roomName,chatMember);
 				}break;
-				case Protocol.inviteUserEnter:{//205#roomName#chatMember(초대된 유저들)
+				case Protocol.inviteUser:{//205#roomName#chatMember(초대된 유저들)
 					String roomName = st.nextToken();
 					List<String> chatMember = decompose(st.nextToken());
 					
@@ -263,7 +241,6 @@ public class ClientThread extends Thread{
 								+chat_msg+"\n"
 								,null);
 					}
-					
 				}break;
 				case Protocol.sendEmoticon:{//310#
 					

@@ -58,7 +58,7 @@ public class CreateChattingHandler implements ActionListener,ItemListener{
 					JOptionPane.showMessageDialog(null, "선택된 유저가 없습니다.", "메시지", JOptionPane.WARNING_MESSAGE);
 				}else {
 					try {
-						client.send(Protocol.inviteUserEnter,ccView.roomName,ccView.selected_ID.toString());
+						client.send(Protocol.inviteUser,ccView.roomName,ccView.selected_ID.toString());
 					} catch (IOException e) {
 						e.printStackTrace();
 					} finally {
@@ -68,7 +68,7 @@ public class CreateChattingHandler implements ActionListener,ItemListener{
 			}
 		}//////////////////////end of try
 			catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 

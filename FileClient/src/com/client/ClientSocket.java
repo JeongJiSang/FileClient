@@ -50,6 +50,7 @@ public class ClientSocket extends Socket{
 			else 
 				msg = msg+str[i]+Protocol.seperator;				
 		}
+		System.out.println("샌드 메소드"+msg);
 		oos.writeObject(msg);
 	}
 	/**
@@ -74,7 +75,9 @@ public class ClientSocket extends Socket{
 		file.receiveSend(roomName, fileName);
 	}
 	public void close() throws IOException {
+		thread.interrupt();
 		thread.destroy();
 		super.close();
+		
 	}
 }

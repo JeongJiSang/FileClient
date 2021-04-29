@@ -36,7 +36,6 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 		
 			else if(obj == chatView.jbtn_send) {
 				try {
-					System.out.println("전송!!");
 					client.send(Protocol.sendMessage,chatView.roomName
 								,Protocol.myID,chatView.jtf_msg.getText());
 				} catch (IOException e1) {
@@ -46,7 +45,7 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 			}
 			else if(obj == chatView.jbtn_invite) {
 				try {//204
-					client.send(Protocol.inviteUser,roomName,Protocol.myID);
+					client.send(Protocol.inviteUserView,roomName,Protocol.myID);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

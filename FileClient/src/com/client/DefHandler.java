@@ -26,9 +26,7 @@ public class DefHandler implements ActionListener, WindowListener{
 		Object obj = ae.getSource();
 		try {
 			if (obj.equals(defView.jbtn_chat)) {
-				System.out.println("눌림");
 				client.send(Protocol.createRoomView, Protocol.myID);
-
 			}
 			// 로그아웃
 			else if (obj.equals(defView.jbtn_logout)) {
