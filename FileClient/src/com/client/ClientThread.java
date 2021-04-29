@@ -37,7 +37,6 @@ public class ClientThread extends Thread{
 	 ************************/
 	Map<String, ChatRoomView> chatRoomList= null;
 	
-	
 	public ClientThread(ClientSocket client) {
 		this.client = client;
 		logView = new LoginView(client);// 최초 로그인 뷰 실행
