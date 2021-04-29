@@ -34,7 +34,6 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 		
 			else if(obj == chatView.jbtn_send) {
 				try {
-					System.out.println("전송!!");
 					client.send(Protocol.sendMessage,chatView.roomName
 								,Protocol.myID,chatView.jtf_msg.getText());
 				} catch (IOException e1) {
@@ -44,13 +43,12 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 			}
 			else if(obj == chatView.jbtn_invite) {
 				try {//204
-					client.send(Protocol.inviteUser,chatView.roomName,Protocol.myID);
+					client.send(Protocol.inviteUserView,chatView.roomName,Protocol.myID);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 			else if(obj == chatView.jbtn_exit) {
-				System.out.println("exit!!");
 				chatView.dispose();
 				try {
 					client.thread.chatRoomList.remove(chatView.roomName);
@@ -65,9 +63,6 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 				chatView.fd.setVisible(true);
 			    String fileName = chatView.fd.getFile();
 			    String filePath = chatView.fd.getDirectory();
-			    System.out.println(fileName);
-			    System.out.println(filePath);
-			    System.out.println(filePath+fileName);
 			    try {
 			    	File file = new File(filePath+fileName);
 			    	client.send(chatView.roomName, file);

@@ -10,7 +10,6 @@ import javax.swing.JTextField;
 
 public class LoginView extends JFrame{
 	LoginHandler logHandler = null;
-	ClientSocket client = null;
 	
 	JLabel 			jlb_id = new JLabel("ID");
 	JLabel 			jlb_pw = new JLabel("PW");
@@ -22,7 +21,7 @@ public class LoginView extends JFrame{
 	
 	
 	protected LoginView(ClientSocket client) {
-		logHandler = new LoginHandler(this,client);
+		logHandler = new LoginHandler(client, this);
 		initDisplay();
 	}
 	

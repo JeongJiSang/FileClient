@@ -51,6 +51,7 @@ public class ClientSocket extends Socket{
 			else 
 				msg = msg+str[i]+Protocol.seperator;				
 		}
+		System.out.println("샌드 메소드"+msg);
 		oos.writeObject(msg);
 	}
 	/**
@@ -77,8 +78,8 @@ public class ClientSocket extends Socket{
 	
 	public void close() throws IOException {
 		//프로세스 죽이기 or 메인스레드를 죽이거나......
-		
 		thread.interrupt();
 		super.close();
+		
 	}
 }
