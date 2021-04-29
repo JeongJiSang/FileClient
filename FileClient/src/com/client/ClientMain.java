@@ -9,8 +9,8 @@ public class ClientMain {
 
 	public static void main(String[] args) {
 		try {
-			ClientAddress chatAddress = new ClientAddress("localhost", 9100);
-			ClientAddress fileAddress = new ClientAddress("localhost", 9101);
+			ClientAddress chatAddress = new ClientAddress("edc3665.iptime.org", 9100);
+			ClientAddress fileAddress = new ClientAddress("edc3665.iptime.org", 9101);
 			ClientSocket client = new ClientSocket(chatAddress, fileAddress);
 		} catch (IOException e) {
 			e.printStackTrace();

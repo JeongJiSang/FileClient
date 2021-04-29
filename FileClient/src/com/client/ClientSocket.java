@@ -36,7 +36,6 @@ public class ClientSocket extends Socket{
 		ois = new ObjectInputStream(getInputStream());
 		thread = new ClientThread(this);
 		thread.start();
-		thread.interrupt();
 		//구분을 줘서 서버연결 성공 시 쓰레드 실행, 서버 연결 불가시 메세지 출력
 	}
 	/**
@@ -79,7 +78,7 @@ public class ClientSocket extends Socket{
 	public void close() throws IOException {
 		//프로세스 죽이기 or 메인스레드를 죽이거나......
 		thread.interrupt();
-		super.close();
-		
+		close();
+		System.exit(0);
 	}
 }

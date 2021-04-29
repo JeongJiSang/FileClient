@@ -19,7 +19,6 @@ public class LoginView extends JFrame{
 	JButton 		jbtn_join  = new JButton("회원가입");
 	Font 			font 	   = new Font("고딕체",Font.BOLD, 17);
 	
-	
 	protected LoginView(ClientSocket client) {
 		logHandler = new LoginHandler(client, this);
 		initDisplay();
@@ -49,8 +48,8 @@ public class LoginView extends JFrame{
 		jbtn_join.setBounds(160, 350, 100, 40);
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setBounds(700, 200, 400, 600);
 		this.setTitle("Login");
-		this.setSize(400, 600);
 		this.setVisible(true);
 	}
 

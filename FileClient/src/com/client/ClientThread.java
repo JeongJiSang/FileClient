@@ -68,7 +68,7 @@ public class ClientThread extends Thread{
 	
 	public void run(){
 		boolean isStop = false;
-		while(!isStop) {
+		while(!this.currentThread().isInterrupted()) {
 			try {
 				String msg = client.ois.readObject().toString();
 				StringTokenizer st = new StringTokenizer(msg, "#");
@@ -282,7 +282,6 @@ public class ClientThread extends Thread{
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				this.destroy();
 			}
 		}
 	}
