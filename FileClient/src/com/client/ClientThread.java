@@ -24,6 +24,7 @@ public class ClientThread extends Thread{
 	DefHandler defHandler = null;
 	CreateChattingHandler ccHandler = null;
 	ChatRoomHandler crHandler = null;
+	FileHandler fileHandler = null;
 	
 	LoginView logView = null;
 	AddUserView addView = null;
@@ -170,27 +171,6 @@ public class ClientThread extends Thread{
 						defView.dtm_room.addRow(oneRow);
 					}
 				}break;
-				/*
-				case Protocol.enterRoom:{//203#id#roomName#result
-					String id = st.nextToken();
-					String roomName = st.nextToken();
-					String result = st.nextToken();
-					if(result.equals("enter")) {
-						if(id.equals(Protocol.myID)) { //입장하는 본인일 경우
-							chatView = new ChatRoomView(client,roomName); //채팅룸뷰를 켜줌
-							chatRoomList.put(roomName, chatView); //입장한 클라이언트측에 방이름과 채팅룸의 주소번지 저장
-						}else { //본인이 아닌경우(원래 방에 있던 사람일 경우)
-							
-							//고치기!!!!
-							chatView = chatRoomList.get(roomName); 
-							//sendMessage를 거치지않은 초대받은 유저라면, chatRoom에 올라가있는 chatView가 없기 때문에 에러 발생
-							
-							chatView.sd_display.insertString(chatView.sd_display.getLength(), id+" 님이 중간입장 하셨습니다."+"\n", null);
-						}
-					} else if(result.equals("overlap")) {
-						JOptionPane.showMessageDialog(defView, "이미 입장하신 채팅방입니다.");
-					}
-				}break;*/
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
 					String id = st.nextToken();
@@ -273,6 +253,9 @@ public class ClientThread extends Thread{
 					String roomName = st.nextToken();
 					String chat_id = st.nextToken();
 					String fileName = st.nextToken();
+					JLabel jlb_file = new JLabel(fileName);
+					//file Actionhandler 초기화.
+					fileHandler = new FileHandler(client, roomName, fileName, jlb_file);
 					
 					boolean success = true;
 					for(String room : chatRoomList.keySet()) {
@@ -283,36 +266,15 @@ public class ClientThread extends Thread{
 									,"<"+chat_id+">"+" 님이"+"==========="+"\n"
 									+"["+fileName+"]"+"을/를 전송하였습니다."+"\n"
 									,null);
-							//fileName으로된 JButton 생성.
-							//JButton jbtn_file = new JButton(fileName);
 							
 							//fileName으로된 JLbel 생성.
-							JLabel jlb_file = new JLabel(fileName);
 							jlb_file.setForeground(Color.BLUE.darker());
 							jlb_file.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 							
 							chatView.jp_file.add(jlb_file);
 							chatView.jp_file.revalidate();
 							
-							jlb_file.addMouseListener(new MouseAdapter() {
-							    @Override
-							    public void mouseClicked(MouseEvent e) {
-									try {
-										client.receive(roomName, fileName);
-									} catch (IOException e1) {
-										e1.printStackTrace();
-									}
-							    }
-					            @Override
-					            public void mouseExited(MouseEvent e) {
-					            	jlb_file.setText(fileName);
-					            }
-					            @Override
-					            public void mouseEntered(MouseEvent e) {
-					            	jlb_file.setText("<html><a href=''>" + fileName + "</a></html>");
-					            }
-							});///////////////// addMouseListener //////
-							
+							jlb_file.addMouseListener(fileHandler);
 							success = false;
 						}
 					}
@@ -326,7 +288,6 @@ public class ClientThread extends Thread{
 								,null);
 						
 						//fileName으로된 JLbel 생성.
-						JLabel jlb_file = new JLabel(fileName);
 						jlb_file.setForeground(Color.BLUE.darker());
 						jlb_file.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 						
@@ -334,24 +295,7 @@ public class ClientThread extends Thread{
 						chatView.jp_file.add(jlb_file);
 						chatView.jp_file.revalidate();
 						
-						jlb_file.addMouseListener(new MouseAdapter() {
-						    @Override
-						    public void mouseClicked(MouseEvent e) {
-								try {
-									client.receive(roomName, fileName);
-								} catch (IOException e1) {
-									e1.printStackTrace();
-								}
-						    }
-				            @Override
-				            public void mouseExited(MouseEvent e) {
-				            	jlb_file.setText(fileName);
-				            }
-				            @Override
-				            public void mouseEntered(MouseEvent e) {
-				            	jlb_file.setText("<html><a href=''>" + fileName + "</a></html>");
-				            }
-						});///////////////// addMouseListener //////
+						jlb_file.addMouseListener(fileHandler);
 					}
 				}break;
 				}
