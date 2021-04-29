@@ -54,6 +54,17 @@ public class ClientThread extends Thread{
 		return list;
 	}
 	
+	public void showRoom() {
+		while(defView.dtm_room.getRowCount()>0) {
+			defView.dtm_room.removeRow(0);
+		}
+		for(String roomName:chatRoomList.keySet()) {
+			Vector<Object> oneRow = new Vector<Object>();
+			oneRow.add(roomName);
+			defView.dtm_room.addRow(oneRow);
+		}
+	}
+	
 	public void run(){
 		boolean isStop = false;
 		while(!isStop) {
@@ -143,18 +154,7 @@ public class ClientThread extends Thread{
 					//만들어진 채팅방을 Map으로 관리. key: roomName, value: chatView.
 					chatRoomList.put(roomName, chatView);
 					//로그아웃, 나가기에 remove추가할 것
-				}break;
-				case Protocol.showRoom:{//202#serverRoomList(현재 서버에 있는 채팅방이름들)
-					List<String> serverRoomList = decompose(st.nextToken());
-					
-					while(defView.dtm_room.getRowCount()>0) {
-						defView.dtm_room.removeRow(0);
-					}
-					for(Object obj:serverRoomList) {
-						Vector<Object> oneRow = new Vector<Object>();
-						oneRow.add(obj);
-						defView.dtm_room.addRow(oneRow);
-					}
+					showRoom();
 				}break;
 				/*
 				case Protocol.enterRoom:{//203#id#roomName#result
@@ -192,6 +192,7 @@ public class ClientThread extends Thread{
 							}
 						}
 					}
+					showRoom();
 				}break;
 				case Protocol.inviteUser:{//204#roomName#chatMember(나를 제외한 온라인 유저들)
 					String roomName = st.nextToken();
@@ -247,6 +248,7 @@ public class ClientThread extends Thread{
 								,"<"+chat_id+">"+" : "
 								+chat_msg+"\n"
 								,null);
+						showRoom();
 					}
 					
 				}break;
