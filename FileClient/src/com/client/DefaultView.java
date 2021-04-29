@@ -76,7 +76,7 @@ public class DefaultView extends JFrame {
 	
 	public DefaultView(ClientSocket client) {
 		defHandler = new DefHandler(this,client);
-		jlb_name.setText(Protocol.myID);
+		jlb_name.setText(Protocol.myID+"님 환영합니다.");
 		initDisplay();
 	}
 	

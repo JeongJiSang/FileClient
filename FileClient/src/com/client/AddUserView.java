@@ -62,8 +62,9 @@ public class AddUserView extends JDialog{
 
 		//dialog 세팅.
 		//this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		this.setBounds(1100, 200, 400, 400);
+		this.setTitle("회원가입");
 		this.setLayout(null);
-		this.setSize(400, 400);
 		this.setVisible(true);
 	}
 
