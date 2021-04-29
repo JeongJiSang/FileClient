@@ -10,16 +10,14 @@ import java.io.IOException;
 import com.common.Protocol;
 
 public class ChatRoomHandler implements ActionListener,WindowListener {
-	private ClientSocket client = null;
 	private ChatRoomView chatView = null;
-	String roomName = null;
+	private ClientSocket client = null;
 	
-	public void setInstance(ChatRoomView chatView ,ClientSocket client,String roomName) {
+	ChatRoomHandler(ChatRoomView chatView,ClientSocket client){
 		this.chatView = chatView;
-		this.client =client;
-		this.roomName = roomName;
+		this.client = client;
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		Object obj = ae.getSource();
@@ -45,7 +43,7 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 			}
 			else if(obj == chatView.jbtn_invite) {
 				try {//204
-					client.send(Protocol.inviteUserView,roomName,Protocol.myID);
+					client.send(Protocol.inviteUser,chatView.roomName,Protocol.myID);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -88,7 +86,7 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 	@Override
 	public void windowClosing(WindowEvent we) {
 		try {
-			client.send(Protocol.closeRoom,roomName, Protocol.myID);
+			client.send(Protocol.closeRoom,chatView.roomName, Protocol.myID);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

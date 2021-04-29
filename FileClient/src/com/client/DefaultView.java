@@ -18,7 +18,6 @@ import com.common.Protocol;
 
 public class DefaultView extends JFrame {
 	DefHandler defHandler = null;
-	ClientSocket client = null;
 	
 	JTabbedPane jtap = new JTabbedPane();
 	//유저목록 패널
@@ -76,9 +75,7 @@ public class DefaultView extends JFrame {
 	JButton jbtn_enter = new JButton("입장하기");
 	
 	public DefaultView(ClientSocket client) {
-		this.client =client;
-		defHandler = new DefHandler();
-		defHandler.setInstance(this, client);
+		defHandler = new DefHandler(this,client);
 		jlb_name.setText(Protocol.myID);
 		initDisplay();
 	}

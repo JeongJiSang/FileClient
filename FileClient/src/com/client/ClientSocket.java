@@ -74,9 +74,10 @@ public class ClientSocket extends Socket{
 		file = new FileSocket(fileAddress, savePath);
 		file.receiveSend(roomName, fileName);
 	}
+	
 	public void close() throws IOException {
+		//프로세스 죽이기 or 메인스레드를 죽이거나......
 		thread.interrupt();
-		thread.destroy();
 		super.close();
 		
 	}

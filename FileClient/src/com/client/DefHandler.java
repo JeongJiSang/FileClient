@@ -12,13 +12,9 @@ public class DefHandler implements ActionListener, WindowListener{
 	private DefaultView defView = null;
 	private ClientSocket client = null;
 	
-	public void setInstance(DefaultView defView,ClientSocket client) {
+	DefHandler(DefaultView defView,ClientSocket client){
 		this.defView = defView;
 		this.client = client;
-	}
-	
-	DefHandler(){
-		
 	}
 	
 	@Override
@@ -31,6 +27,7 @@ public class DefHandler implements ActionListener, WindowListener{
 			// 로그아웃
 			else if (obj.equals(defView.jbtn_logout)) {
 				client.send(Protocol.logout, Protocol.myID);
+				//client.close();
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

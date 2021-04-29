@@ -38,7 +38,6 @@ public class ClientThread extends Thread{
 	 ************************/
 	Map<String, ChatRoomView> chatRoomList= null;
 	
-	
 	public ClientThread(ClientSocket client) {
 		this.client = client;
 		logView = new LoginView(client);// 최초 로그인 뷰 실행
@@ -119,27 +118,14 @@ public class ClientThread extends Thread{
 						defView.dtm_offline.addRow(oneRow);
 					}
 				}break;
-				case Protocol.logout:{//130#myID#roomNames(Vector)
-					String id = st.nextToken();
-					List<String> roomNames = decompose(st.nextToken());
-					if(id.equals(Protocol.myID)) {
-						for(String key : chatRoomList.keySet()) {
-							chatView = chatRoomList.get(key);
-							chatView.dispose(); //채팅뷰 꺼주기
-						}
-						System.exit(0); //x버튼 눌렀을때도 시스템 종료 고려
-						//defView.dispose(); //디폴트뷰 꺼주기
-						//client.close(); //소켓 소멸
-						//this.interrupt(); //스레드 멈추기.
-					}
-					else {
-						for(String clientRoom:chatRoomList.keySet()) {
-							for(String serverRoom:roomNames) {
-								if(serverRoom.equals(clientRoom)) {
-									chatView = chatRoomList.get(serverRoom);
-									chatView.sd_display.insertString(chatView.sd_display.getLength(), id+" 님이 로그아웃 하셨습니다."+"\n", null);
-								}
-							}
+				case Protocol.logout:{//130#logoutID#roomName
+					String logoutID = st.nextToken();
+					String roomName = st.nextToken();
+					for(String room:chatRoomList.keySet()) {
+						if(roomName.equals(room)) {
+							chatView = chatRoomList.get(room);
+							chatView.sd_display.insertString
+							(chatView.sd_display.getLength(), logoutID+" 님이 로그아웃 하셨습니다."+"\n", null);
 						}
 					}
 				}break;
@@ -233,7 +219,6 @@ public class ClientThread extends Thread{
 						}
 					}
 					if(success) { //폼이 안켜져있는 경우(초대된 애들)
-						crHandler = new ChatRoomHandler();
 						chatView = new ChatRoomView(client, roomName);
 						chatRoomList.put(roomName, chatView);
 						chatView.sd_display.insertString(
