@@ -24,6 +24,7 @@ public class ClientThread extends Thread{
 	DefHandler defHandler = null;
 	CreateChattingHandler ccHandler = null;
 	ChatRoomHandler crHandler = null;
+	FileHandler fileHandler = null;
 	
 	LoginView logView = null;
 	AddUserView addView = null;
@@ -250,6 +251,9 @@ public class ClientThread extends Thread{
 					String roomName = st.nextToken();
 					String chat_id = st.nextToken();
 					String fileName = st.nextToken();
+					JLabel jlb_file = new JLabel(fileName);
+					//file Actionhandler 초기화.
+					fileHandler = new FileHandler(client, roomName, fileName, jlb_file);
 					
 					boolean success = true;
 					for(String room : chatRoomList.keySet()) {
@@ -260,36 +264,15 @@ public class ClientThread extends Thread{
 									,"<"+chat_id+">"+" 님이"+"==========="+"\n"
 									+"["+fileName+"]"+"을/를 전송하였습니다."+"\n"
 									,null);
-							//fileName으로된 JButton 생성.
-							//JButton jbtn_file = new JButton(fileName);
 							
 							//fileName으로된 JLbel 생성.
-							JLabel jlb_file = new JLabel(fileName);
 							jlb_file.setForeground(Color.BLUE.darker());
 							jlb_file.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 							
 							chatView.jp_file.add(jlb_file);
 							chatView.jp_file.revalidate();
 							
-							jlb_file.addMouseListener(new MouseAdapter() {
-							    @Override
-							    public void mouseClicked(MouseEvent e) {
-									try {
-										client.receive(roomName, fileName);
-									} catch (IOException e1) {
-										e1.printStackTrace();
-									}
-							    }
-					            @Override
-					            public void mouseExited(MouseEvent e) {
-					            	jlb_file.setText(fileName);
-					            }
-					            @Override
-					            public void mouseEntered(MouseEvent e) {
-					            	jlb_file.setText("<html><a href=''>" + fileName + "</a></html>");
-					            }
-							});///////////////// addMouseListener //////
-							
+							jlb_file.addMouseListener(fileHandler);
 							success = false;
 						}
 					}
@@ -303,7 +286,6 @@ public class ClientThread extends Thread{
 								,null);
 						
 						//fileName으로된 JLbel 생성.
-						JLabel jlb_file = new JLabel(fileName);
 						jlb_file.setForeground(Color.BLUE.darker());
 						jlb_file.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 						
@@ -311,24 +293,7 @@ public class ClientThread extends Thread{
 						chatView.jp_file.add(jlb_file);
 						chatView.jp_file.revalidate();
 						
-						jlb_file.addMouseListener(new MouseAdapter() {
-						    @Override
-						    public void mouseClicked(MouseEvent e) {
-								try {
-									client.receive(roomName, fileName);
-								} catch (IOException e1) {
-									e1.printStackTrace();
-								}
-						    }
-				            @Override
-				            public void mouseExited(MouseEvent e) {
-				            	jlb_file.setText(fileName);
-				            }
-				            @Override
-				            public void mouseEntered(MouseEvent e) {
-				            	jlb_file.setText("<html><a href=''>" + fileName + "</a></html>");
-				            }
-						});///////////////// addMouseListener //////
+						jlb_file.addMouseListener(fileHandler);
 					}
 				}break;
 				}

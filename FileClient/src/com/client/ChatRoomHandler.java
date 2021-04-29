@@ -64,9 +64,6 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 				chatView.fd.setVisible(true);
 			    String fileName = chatView.fd.getFile();
 			    String filePath = chatView.fd.getDirectory();
-			    System.out.println(fileName);
-			    System.out.println(filePath);
-			    System.out.println(filePath+fileName);
 			    try {
 			    	File file = new File(filePath+fileName);
 			    	client.send(chatView.roomName, file);
