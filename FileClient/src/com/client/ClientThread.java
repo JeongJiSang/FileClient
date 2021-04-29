@@ -180,9 +180,6 @@ public class ClientThread extends Thread{
 				case Protocol.closeRoom:{//210#roomName#id
 					String roomName = st.nextToken();
 					String id = st.nextToken();
-					if(id.equals(Protocol.myID)) {
-						chatRoomList.remove(roomName);
-					}else {
 						for(String room : chatRoomList.keySet()) {
 							if(room.equals(roomName)) {
 								chatView = chatRoomList.get(roomName);
@@ -191,7 +188,6 @@ public class ClientThread extends Thread{
 												,null);
 							}
 						}
-					}
 					showRoom();
 				}break;
 				case Protocol.inviteUser:{//204#roomName#chatMember(나를 제외한 온라인 유저들)

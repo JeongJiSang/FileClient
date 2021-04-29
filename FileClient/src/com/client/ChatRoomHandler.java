@@ -53,6 +53,8 @@ public class ChatRoomHandler implements ActionListener,WindowListener {
 				System.out.println("exit!!");
 				chatView.dispose();
 				try {
+					client.thread.chatRoomList.remove(chatView.roomName);
+					client.thread.showRoom();
 					client.send(Protocol.closeRoom,chatView.roomName, Protocol.myID);
 				} catch (IOException e) {
 					e.printStackTrace();

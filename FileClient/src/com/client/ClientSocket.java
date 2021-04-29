@@ -36,6 +36,7 @@ public class ClientSocket extends Socket{
 		ois = new ObjectInputStream(getInputStream());
 		thread = new ClientThread(this);
 		thread.start();
+		thread.interrupt();
 		//구분을 줘서 서버연결 성공 시 쓰레드 실행, 서버 연결 불가시 메세지 출력
 	}
 	/**

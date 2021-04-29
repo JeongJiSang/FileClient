@@ -27,7 +27,7 @@ public class DefHandler implements ActionListener, WindowListener{
 			// 로그아웃
 			else if (obj.equals(defView.jbtn_logout)) {
 				client.send(Protocol.logout, Protocol.myID);
-				//client.close();
+				System.exit(0);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
